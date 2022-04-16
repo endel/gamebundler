@@ -23,9 +23,7 @@ const server = !isProduction && httpServer.createServer({
 
     } else if (req.url === "/__reload") {
       // wait for rebuild to complete the reload request..
-      rebuild.on("rebuild", () => {
-        res.end();
-      });
+      rebuild.on("rebuild", () => res.end());
 
     } else {
       next();
