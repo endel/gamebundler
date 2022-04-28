@@ -1,4 +1,4 @@
-import * as pc from "playcanvas";
+import pc from "playcanvas";
 
 // create a PlayCanvas application
 const canvas = document.getElementById('application');

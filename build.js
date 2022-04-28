@@ -1,12 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const events = require('events');
+const open = require('open');
 
 const esbuild = require('esbuild');
 const httpServer = require('http-server');
 
 const isProduction = (process.env.NODE_ENV === "production");
 const rebuild = new events.EventEmitter();
+
+// TODO?
+// - HTML Minifier https://htmlnano.netlify.app
 
 const server = !isProduction && httpServer.createServer({
   root: path.resolve("public"),
@@ -53,7 +57,10 @@ esbuild
   })
   .then((r) => {
     const port = process.env.PORT || 8000;
-    server?.listen(port, () => console.log(`Serving at ${port}`));
+    server?.listen(port, () => {
+      console.log(`Serving at localhost:${port}`)
+      open(`http://localhost:${port}`);
+    });
     console.log(r);
   })
   .catch(() => process.exit(1));
