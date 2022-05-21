@@ -1,9 +1,23 @@
-import vm from 'vm';
 import fs from 'fs';
 import path from 'path';
+import esbuild from '@netlify/esbuild';
 import parsed from '../cli-parsed';
+import { isDevelopment } from "../dev";
+import { fileLoaderPlugin } from './file-loader';
 
-export default {
+function buildBundle(path: string) {
+  return esbuild.build({
+    entryPoints: [path],
+    sourcemap: false,
+    write: false,
+    plugins: [fileLoaderPlugin], // , bundleLoaderPlugin
+    minify: !isDevelopment,
+    outdir: 'out',
+  })
+}
+
+
+export const bundleLoaderPlugin = {
   name: "bundle-loader",
 
   setup(build: any) {
@@ -19,15 +33,14 @@ export default {
       // const program = ts.createProgram();
 
       try {
-        // const bundleCode = service.compile(contents, path.basename(args.path));
+        const result = await buildBundle(args.path);
 
-        // const context = vm.createContext({
-        //   require,
-        //   exports: {},
-        // });
-        // const bundleOutput = vm.runInNewContext(`require('tslib');${bundleCode}`, context);
+        for (let out of result.outputFiles) {
+          console.log(out.path, out.text)
+        }
 
-        // console.log({ bundleCode, bundleOutput });
+        console.log("RESULT:", result);
+
       } catch (e) {
         console.error("OOPS!", e);
       }

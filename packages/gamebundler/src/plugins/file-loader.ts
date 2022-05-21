@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import parsed from '../cli-parsed';
 
-export default {
+export const fileLoaderPlugin = {
   name: "file-loader",
 
   setup(build: any) {

@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import events from 'events';
 
 import open from 'open';
 import esbuild from '@netlify/esbuild';
@@ -8,16 +7,14 @@ import esbuild from '@netlify/esbuild';
 import http from 'http';
 import httpServer from 'http-server';
 
-const isProduction = (process.env.NODE_ENV === "production");
-const rebuild = new events.EventEmitter();
+import { fileLoaderPlugin } from './plugins/file-loader';
+import { bundleLoaderPlugin } from './plugins/bundle-loader';
 
-import fileLoaderPlugin from './plugins/file-loader';
-import bundleLoaderPlugin from './plugins/bundle-loader';
 import cli from './cli-parsed';
 
-console.log(cli);
+import { rebuild, isDevelopment } from './dev';
 
-const server = !isProduction && httpServer.createServer({
+const server = isDevelopment && httpServer.createServer({
   root: cli.options.out,
   cors: true,
   autoIndex: true,
@@ -65,12 +62,12 @@ esbuild
     outfile: path.resolve(cli.options.out, "bundle.js"),
     absWorkingDir: process.cwd(),
     bundle: true,
-    minify: isProduction,
+    minify: !isDevelopment,
     sourcemap: true,
     plugins: [ bundleLoaderPlugin, fileLoaderPlugin ],
     // treeShaking: true,
     // target: "es2020,chrome58,edge16,firefox57,ie11,ios10,node12,opera45,safari11",
-    watch: (isProduction) ? false : {
+    watch: (!isDevelopment) ? false : {
       onRebuild(err, result) {
         if (err) {
           console.error('watch build failed:', err);
