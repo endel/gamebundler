@@ -1,21 +1,40 @@
 {
-  "name": "voxel-demo",
+  "private": true,
+  "name": "gamebundler",
   "version": "1.0.0",
-  "description": "",
+  "description": "Web Game Bundler",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development node build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run start --prefix packages/example",
+    "build": "npm run build --prefix packages/runtime",
+    "watch": "npm run watch --prefix packages/gamebundler & npm run watch --prefix packages/runtime & npm run watch --prefix packages/comptime & npm run watch --prefix packages/spritesheet"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endel/voxel-playcanvas.git"
+  },
+  "keywords": [
+    "esbuild",
+    "web",
+    "builder",
+    "asset",
+    "packer"
+  ],
+  "workspaces": [
+    "packages/comptime",
+    "packages/gamebundler",
+    "packages/runtime",
+    "packages/spritesheet"
+  ],
   "author": "Endel Dreyer",
   "license": "MIT",
-  "devDependencies": {
-    "esbuild": "^0.14.30",
-    "http-server": "^14.1.0",
-    "open": "^8.4.0",
-    "typescript": "^4.6.3"
+  "bugs": {
+    "url": "https://github.com/endel/voxel-playcanvas/issues"
   },
-  "dependencies": {
-    "playcanvas": "^1.53.0"
+  "homepage": "https://github.com/endel/voxel-playcanvas#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.30",
+    "typescript": "^4.6.4",
+    "pixi.js": "^6.3.0"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "@gamebundler/runtime",
+  "version": "1.0.0",
+  "description": "Minimal runtime required for @gamestd/bundler",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game",
+    "bundler"
+  ],
+  "author": "Endel Dreyer",
+  "license": "MIT"
+}

@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "example",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "gamebundler ./pixijs/index.ts",
+    "playcanvas": "gamebundler .playcanvas/index.ts",
+    "phaser": "gamebundler ./phaser/index.ts"
+  },
+  "author": "Endel Dreyer",
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.55.2",
+    "pixi.js": "^6.3.0",
+    "playcanvas": "^1.53.4"
+  },
+  "devDependencies": {
+    "gamebundler": "^1.0.0",
+    "@gamebundler/comptime": "^1.0.0",
+    "@gamebundler/runtime": "^1.0.0"
+  }
+}

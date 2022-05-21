@@ -1,0 +1,24 @@
+{
+  "name": "@gamebundler/spritesheet",
+  "version": "1.0.0",
+  "description": "Spritesheet generation for gamebundler",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game",
+    "bundler"
+  ],
+  "author": "Endel Dreyer",
+  "license": "MIT",
+  "homepage": "https://gamestd.io/",
+  "dependencies": {
+    "bin-pack": "^1.0.2",
+    "canvas": "^2.9.1",
+    "detect-edges": "^1.1.0"
+  }
+}
