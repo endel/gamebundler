@@ -1,12 +1,15 @@
-import Canvas from "canvas";
-import cropping from "detect-edges";
-import pack from "bin-pack";
+/**
+ * Copyright (c) 2020 Pencil.js
+ * https://github.com/pencil-js/spritesheet/
+ */
 
-// FIXME: can read JSON module when supported
-import { readFile } from "fs/promises";
-// import pkg from "../package.json";
-//
-// const { homepage, version } = pkg;
+import Canvas from "canvas";
+import pack from "bin-pack";
+import cropping from "./detect-edges";
+
+import pkg from "../package.json";
+
+const { homepage, version } = pkg;
 
 const { loadImage, createCanvas } = Canvas;
 
@@ -90,9 +93,9 @@ export default async (paths: string[], options?: Options) => {
     throw new Error(`outputFormat should only be one of ${supported}, but "${outputFormat}" was given.`);
   }
 
-  // FIXME: can read JSON module when supported
-  const pkgJSON = await readFile(new URL("../package.json", import.meta.url));
-  const { homepage, version } = JSON.parse(pkgJSON.toString());
+  // // FIXME: can read JSON module when supported
+  // const pkgJSON = await readFile(new URL("../package.json", __dirname));
+  // const { homepage, version } = JSON.parse(pkgJSON.toString());
 
   // Load all images
   const loads = paths.map(path => loadImage(path));

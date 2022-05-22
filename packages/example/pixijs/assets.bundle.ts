@@ -1,9 +1,11 @@
 import * as bundler from "@gamebundler/comptime";
 
+import bottom0 from './assets/ball/bottom-0.png';
+
 // import balls from './assets/ball/*.png';
 
 export const spritesheet = bundler.spritesheet([
-  require('./assets/ball/bottom-0.png'),
+  bottom0,
   require('./assets/ball/bottom-1.png'),
   require('./assets/ball/bottom-2.png'),
 

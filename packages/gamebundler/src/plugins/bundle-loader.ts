@@ -1,21 +1,25 @@
 import fs from 'fs';
+import vm from 'vm';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
 import parsed from '../cli-parsed';
 import { isDevelopment } from "../dev";
 import { fileLoaderPlugin } from './file-loader';
 
-function buildBundle(path: string) {
+function buildAssetBundle(path: string) {
+  console.log("ENTRY POINT:", path);
   return esbuild.build({
     entryPoints: [path],
+    platform: "browser",
     sourcemap: false,
     write: false,
-    plugins: [fileLoaderPlugin], // , bundleLoaderPlugin
+    bundle: true,
+    external: ["@gamebundler/comptime"],
+    plugins: [fileLoaderPlugin], // ,
     minify: !isDevelopment,
     outdir: 'out',
   })
 }
-
 
 export const bundleLoaderPlugin = {
   name: "bundle-loader",
@@ -27,19 +31,21 @@ export const bundleLoaderPlugin = {
       const destiny = `assets${path.sep}${parsed.id}-${basename}${extname}`;
       const contents = fs.readFileSync(args.path).toString();
 
+      console.log("args:", args);
       console.log("BUNDLE:", { extname, basename, contents });
 
       // const tsSourceFile = ts.createSourceFile("bundle.ts", , ts.ScriptTarget.Latest);
       // const program = ts.createProgram();
 
       try {
-        const result = await buildBundle(args.path);
+        const bundle = await buildAssetBundle(args.path);
+        bundle.outputFiles.forEach((file) => {
+          console.log(file.path, file.text);
+          const context = vm.createContext({ require, exports: {} });
 
-        for (let out of result.outputFiles) {
-          console.log(out.path, out.text)
-        }
-
-        console.log("RESULT:", result);
+          const result = vm.runInContext(file.text, context);
+          console.log({result})
+        });
 
       } catch (e) {
         console.error("OOPS!", e);

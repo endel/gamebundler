@@ -7,6 +7,8 @@ export const fileLoaderPlugin = {
 
   setup(build: any) {
     build.onLoad({ filter: /\.(png|jpg|jpeg|svg|xml|webp)$/ }, async (args: any) => {
+      console.log("FILE LOADER:", args.path);
+
       const extname = path.extname(args.path);
       const basename = path.basename(args.path, extname);
       const destiny = `assets${path.sep}${parsed.id}-${basename}${extname}`;
