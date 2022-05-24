@@ -2,6 +2,7 @@
   "name": "gamebundler",
   "version": "1.0.0",
   "description": "Zero-configuration JavaScript Game Bundler",
+  "type": "module",
   "types": "./dts/plugins.d.ts",
   "bin": {
     "gamebundler": "./lib/bin.js"
@@ -19,8 +20,7 @@
     "http-server": "^14.1.0",
     "open": "^8.4.0",
     "ts-node": "^10.7.0",
-    "tslib": "^2.4.0",
-    "typescript": "^4.6.3"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@gamebundler/comptime": "^1.0.0",

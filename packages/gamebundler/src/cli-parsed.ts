@@ -1,10 +1,14 @@
 import path from 'path';
 import fs from 'fs';
 
-const cli = require('cac')();
+// @ts-ignore
+import cac from 'cac';
+
+const cli = cac();
 
 cli.option("--html <file>", "Use specified HTML file", { default: path.resolve("template", "index.html") });
 cli.option("--out <directory>", "Output directory", { default: path.resolve("public") });
+cli.option("--cache-dir <directory>", "Local cache directory", { default: path.resolve(".cache") });
 cli.option("--tsconfig <custom-tsconfig.json>", "tsconfig.json file path.", { default: path.resolve("template", "tsconfig.json") });
 
 cli.version('1.0.0');
@@ -19,8 +23,9 @@ if (cli.options.help || cli.options.version) {
   process.exit();
 }
 
-// resolve output path
+// resolve paths
 parsed.options.out = path.resolve(parsed.options.out);
+parsed.options.cacheDir = path.resolve(parsed.options.cacheDir);
 
 // build id
 parsed.id = Math.floor(Math.random() * 1);

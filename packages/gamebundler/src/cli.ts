@@ -7,12 +7,11 @@ import esbuild from '@netlify/esbuild';
 import http from 'http';
 import httpServer from 'http-server';
 
-import { fileLoaderPlugin } from './plugins/file-loader';
-import { bundleLoaderPlugin } from './plugins/bundle-loader';
+import { fileLoaderPlugin } from './plugins/file-loader.js';
+import { bundleLoaderPlugin } from './plugins/bundle-loader.js';
 
-import cli from './cli-parsed';
-
-import { rebuild, isDevelopment } from './dev';
+import cli from './cli-parsed.js';
+import { rebuild, isDevelopment } from './dev.js';
 
 const server = isDevelopment && httpServer.createServer({
   root: cli.options.out,
@@ -64,6 +63,10 @@ esbuild
     bundle: true,
     minify: !isDevelopment,
     sourcemap: true,
+    banner: {
+      js: "// built with gamebundler (https://github.com/endel/gamebundler)",
+      css: "// built with gamebundler (https://github.com/endel/gamebundler)",
+    },
     plugins: [ bundleLoaderPlugin, fileLoaderPlugin ],
     // treeShaking: true,
     // target: "es2020,chrome58,edge16,firefox57,ie11,ios10,node12,opera45,safari11",

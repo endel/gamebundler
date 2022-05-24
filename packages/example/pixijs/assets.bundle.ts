@@ -1,10 +1,13 @@
+console.log("I'm on assets.bundle!");
+
 import * as bundler from "@gamebundler/comptime";
 
 import bottom0 from './assets/ball/bottom-0.png';
 
 // import balls from './assets/ball/*.png';
 
-export const spritesheet = bundler.spritesheet([
+console.log("I'm gonna run bundler.spritesheet...");
+const result = bundler.spritesheet([
   bottom0,
   require('./assets/ball/bottom-1.png'),
   require('./assets/ball/bottom-2.png'),
@@ -25,3 +28,6 @@ export const spritesheet = bundler.spritesheet([
   require('./assets/ball/top-1.png'),
   require('./assets/ball/top-2.png'),
 ]);
+
+console.log("Now let's await for the result...", result);
+export const spritesheet = await result;

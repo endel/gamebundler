@@ -71,6 +71,7 @@ const defaultOptions: Options = {
 };
 
 export default async (paths: string[], options?: Options) => {
+  console.log("Let's generate spritesheet for...", paths);
   const { outputFormat, margin, crop, outputName, scale } = {
     ...defaultOptions,
     ...options,

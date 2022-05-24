@@ -3,6 +3,7 @@
   "name": "gamebundler",
   "version": "1.0.0",
   "description": "Web Game Bundler",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "npm run start --prefix packages/example",
@@ -34,7 +35,7 @@
   "homepage": "https://github.com/endel/voxel-playcanvas#readme",
   "devDependencies": {
     "@types/node": "^17.0.30",
-    "typescript": "^4.6.4",
-    "pixi.js": "^6.3.0"
+    "pixi.js": "^6.3.0",
+    "typescript": "^4.8.0-dev.20220523"
   }
 }
