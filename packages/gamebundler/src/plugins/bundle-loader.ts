@@ -1,6 +1,5 @@
-import fs, { fstatSync } from 'fs';
+import fs from 'fs';
 import fsPromises from 'fs/promises';
-import vm from 'vm';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
 
@@ -37,11 +36,8 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
       const basename = path.basename(args.path, extname);
       const destiny = `assets${path.sep}${parsed.id}-${basename}${extname}`;
 
-      let exports = {};
+      let exports: any = {};
       console.log("BUNDLE:", { extname, basename, destiny });
-
-      // const tsSourceFile = ts.createSourceFile("bundle.ts", , ts.ScriptTarget.Latest);
-      // const program = ts.createProgram();
 
       try {
         const bundle = await buildAssetBundle(args.path);
@@ -58,62 +54,17 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           try {
             exports = await import(file.path);
 
+
             console.log("Evaluated:", { exports });
           } catch (e) {
             console.log("Error...");
             console.error(e);
           }
-
-          // // --experimental-vm-modules
-          // // TODO: remove this when vm module get stable
-          // declare module 'vm' {
-          //   class SourceTextModule {
-          //     constructor(code: string, options?: { context: Context });
-          //     evaluate(): void;
-          //     link(linker: Function): void;
-          //   }
-          // }
-          // const SourceTextModule: typeof vm.SourceTextModule  = (vm as any).SourceTextModule;
-          // if (!SourceTextModule) {
-          //   throw new Error("--experimental-vm-modules is mandatory.\nbundle-loader.ts depends on experimental vm.Module https://nodejs.org/api/vm.html#class-vmmodule");
-          // }
-
-          // // const result = vm.runInContext(file.text, context);
-
-          // const context = vm.createContext({});
-          // const sourceTextModule = new SourceTextModule(file.text, { context });
-
-          // async function linker(specifier: any, referencingModule: any) {
-          //   console.log("linker:", { specifier, referencingModule });
-          //   const imported = await import(specifier)
-          //   console.log("IMPORTED:", imported);
-          //   return imported;
-          //   // if (specifier === 'foo') {
-          //   //   return new vm.SourceTextModule(`
-          //   //     // The "secret" variable refers to the global variable we added to
-          //   //     // "contextifiedObject" when creating the context.
-          //   //     export default secret;
-          //   //   `, { context: referencingModule.context });
-
-          //   //   // Using `contextifiedObject` instead of `referencingModule.context`
-          //   //   // here would work as well.
-          //   // }
-
-          //   // throw new Error(`Unable to resolve dependency: ${specifier}`);
-          // }
-          // console.log(".link() ...");
-          // await sourceTextModule.link(linker);
-
-          // console.log(".evaluate() ...");
-          // const result = await sourceTextModule.evaluate();
-          // console.log({ result });
         }));
-
 
       } catch (e) {
         console.error("OOPS!", e);
       }
-
 
       // // ensure "assets" directory exists
       // if (!fs.existsSync(path.resolve(parsed.options.out, "assets"))) {
@@ -123,9 +74,22 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
       // // copy original file into built directory
       // await fs.promises.copyFile(args.path, `${parsed.options.out}/${destiny}`);
 
-      console.log("Let's return...");
+      let contents: string = "";
 
-      return { contents: `export default "${destiny}"` };
+      for (const key in exports) {
+        if (key === "default") {
+          contents += "export default ";
+
+        } else {
+          contents += `export const ${key} = `;
+        }
+
+        contents += JSON.stringify(exports[key]) + ";\n";
+      }
+
+      console.log(args.path, "\n", contents);
+
+      return { contents };
     });
   }
 

@@ -1,4 +1,30 @@
+import fs from "fs/promises";
 import generateSpritesheet from "@gamebundler/spritesheet";
+
+class File {
+  constructor(
+    private extension: string,
+    private contents: string,
+  ) {}
+
+  async write(filename) {
+    await fs.writeFile(`${filename}.${this.extension}`, this.contents);
+  }
+
+  toJSON() {
+    return `filename.${this.extension}`;
+  }
+}
+
+export const enqueuedFiles: File[] = [];
+
+function outputFile(extension: string, contents: string) {
+  const file = new File(extension, contents);
+
+  enqueuedFiles.push(file);
+
+  return file;
+}
 
 export async function spritesheet(
   paths: Array<string | { default: string }>,
@@ -12,8 +38,7 @@ export async function spritesheet(
   const result = await generateSpritesheet(files, options);
 
   return {
-    type: "spritesheet",
-    image: result.image.toString(),
-    json: result.json
+    image: outputFile("png", result.image.toString()),
+    json: outputFile("json", JSON.stringify(result.json))
   };
 }

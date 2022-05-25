@@ -17,7 +17,7 @@ cli.help();
 // steam? cordova? electron? 👀
 // cli.option("--target", "Build target (web) ", { default: "web" });
 
-const parsed = cli.parse();
+const parsed: any = cli.parse();
 
 if (cli.options.help || cli.options.version) {
   process.exit();
