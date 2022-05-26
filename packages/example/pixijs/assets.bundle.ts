@@ -6,6 +6,7 @@ import bottom0 from './assets/ball/bottom-0.png';
 
 // import balls from './assets/ball/*.png';
 
+
 console.log("I'm gonna run bundler.spritesheet...");
 const result = bundler.spritesheet([
   bottom0,

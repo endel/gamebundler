@@ -1,29 +1,8 @@
-import fs from "fs/promises";
 import generateSpritesheet from "@gamebundler/spritesheet";
+import { outputFile } from "./file";
 
-class File {
-  constructor(
-    private extension: string,
-    private contents: string,
-  ) {}
-
-  async write(filename) {
-    await fs.writeFile(`${filename}.${this.extension}`, this.contents);
-  }
-
-  toJSON() {
-    return `filename.${this.extension}`;
-  }
-}
-
-export const enqueuedFiles: File[] = [];
-
-function outputFile(extension: string, contents: string) {
-  const file = new File(extension, contents);
-
-  enqueuedFiles.push(file);
-
-  return file;
+export async function image(path: string, options?: any) {
+  return path;
 }
 
 export async function spritesheet(
