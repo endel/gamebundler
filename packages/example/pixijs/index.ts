@@ -3,7 +3,7 @@ import { canvas } from "@gamebundler/runtime";
 
 import { spritesheet } from "./assets.bundle";
 
-console.log({ spritesheet });
+console.log("SPRITESHEET:", spritesheet);
 
 const app = new PIXI.Application({
   view: canvas,

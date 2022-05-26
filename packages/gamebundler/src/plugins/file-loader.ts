@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import esbuild from "@netlify/esbuild";
-import parsed from '../cli-parsed.js';
+import parsed, { getCacheDir } from '../cli-parsed.js';
 
 function isPartOfBundle(build: esbuild.PluginBuild) {
   return (
     build.initialOptions.write === false &&
-    build.initialOptions.outdir === "tmp"
+    build.initialOptions.outdir === getCacheDir()
   );
 }
 
@@ -24,11 +24,6 @@ export const fileLoaderPlugin: esbuild.Plugin = {
         const basename = path.basename(args.path, extname);
 
         destiny = `assets${path.sep}${parsed.id}-${basename}${extname}`;
-
-        // ensure "assets" directory exists
-        if (!fs.existsSync(path.resolve(parsed.options.out, "assets"))) {
-          fs.mkdirSync(path.resolve(parsed.options.out, "assets"));
-        }
 
         // copy original file into built directory
         await fs.promises.copyFile(args.path, `${parsed.options.out}/${destiny}`);

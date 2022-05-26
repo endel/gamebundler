@@ -2,8 +2,9 @@ import fs from 'fs';
 import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
+import { persistEnqueuedFiles } from "@gamebundler/comptime";
 
-import parsed from '../cli-parsed.js';
+import { getAssetsDirectory, getCacheDir, getOutputDirectory } from '../cli-parsed.js';
 import { isDevelopment } from "../dev.js";
 import { fileLoaderPlugin } from './file-loader.js';
 
@@ -23,7 +24,7 @@ function buildAssetBundle(path: string) {
     external: ["@gamebundler/comptime"],
     plugins: [fileLoaderPlugin], // ,
     minify: !isDevelopment,
-    outdir: 'tmp',
+    outdir: getCacheDir(),
   });
 }
 
@@ -32,21 +33,12 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
 
   setup(build) {
     build.onLoad({ filter: /\.bundle\.ts$/ }, async (args) => {
-      const extname = path.extname(args.path);
-      const basename = path.basename(args.path, extname);
-      const destiny = `assets${path.sep}${parsed.id}-${basename}${extname}`;
-
       let exports: any = {};
-      console.log("BUNDLE:", { extname, basename, destiny });
 
       try {
         const bundle = await buildAssetBundle(args.path);
         await Promise.all(bundle.outputFiles.map(async (file) => {
           file.path = file.path.replace(".js", ".mjs");
-
-          // make sure `tmp/` directory exists.
-          const tmpDirectory = path.dirname(file.path);
-          if (!fs.existsSync(tmpDirectory)) { await fsPromises.mkdir(tmpDirectory); }
 
           // write compiled file
           await fsPromises.writeFile(file.path, file.text);
@@ -54,25 +46,16 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           try {
             exports = await import(file.path);
 
-
-            console.log("Evaluated:", { exports });
           } catch (e) {
-            console.log("Error...");
             console.error(e);
           }
         }));
 
       } catch (e) {
-        console.error("OOPS!", e);
+        console.error("ERROR - bundle-loader:", e);
       }
 
-      // // ensure "assets" directory exists
-      // if (!fs.existsSync(path.resolve(parsed.options.out, "assets"))) {
-      //   fs.mkdirSync(path.resolve(parsed.options.out, "assets"));
-      // }
-
-      // // copy original file into built directory
-      // await fs.promises.copyFile(args.path, `${parsed.options.out}/${destiny}`);
+      await persistEnqueuedFiles(getAssetsDirectory());
 
       let contents: string = "";
 

@@ -31,4 +31,6 @@ const result = bundler.spritesheet([
 ]);
 
 console.log("Now let's await for the result...", result);
-export const spritesheet = await result;
+const awaited = await result;
+console.log("Result is:", awaited);
+export const spritesheet = awaited;

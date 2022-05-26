@@ -12,6 +12,7 @@ import { bundleLoaderPlugin } from './plugins/bundle-loader.js';
 
 import cli from './cli-parsed.js';
 import { rebuild, isDevelopment } from './dev.js';
+import { templatePath } from './paths.js';
 
 const server = isDevelopment && httpServer.createServer({
   root: cli.options.out,
@@ -23,7 +24,7 @@ const server = isDevelopment && httpServer.createServer({
     // intercept reload script.
     if (req.url === "/reload/reload.js") {
       res.setHeader("Content-Type", "text/javascript");
-      res.write(fs.readFileSync(path.resolve("template", "reload.js")));
+      res.write(fs.readFileSync(path.resolve(templatePath, "reload.js")));
       res.end();
       return;
 
@@ -64,8 +65,8 @@ esbuild
     minify: !isDevelopment,
     sourcemap: true,
     banner: {
-      js: "// built with gamebundler (https://github.com/endel/gamebundler)",
-      css: "// built with gamebundler (https://github.com/endel/gamebundler)",
+      js: "// built with gamebundler\n// https://github.com/endel/gamebundler",
+      css: "/* built with gamebundler */\n/* https://github.com/endel/gamebundler */",
     },
     plugins: [ bundleLoaderPlugin, fileLoaderPlugin ],
     // treeShaking: true,
