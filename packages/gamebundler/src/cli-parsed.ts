@@ -54,6 +54,7 @@ if (needCreateDir) {
   fs.mkdirSync(parsed.options.out);
 }
 
+/* extract this all to @comptime  */
 export function getOutputDirectory(): string {
   return parsed.options.out;
 }

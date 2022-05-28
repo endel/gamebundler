@@ -5,19 +5,18 @@ import crypto from "crypto";
 export const enqueuedFiles: File[] = [];
 
 export class File {
-  private filename: string;
-
   constructor(
     private extension: string,
     private contents: string,
+    private filename?: string
   ) {
-    const fingerprint = crypto.createHash('sha1').update(contents).digest('base64url');
-    this.filename = `${fingerprint.toString()}.${this.extension}`;
+    if (!filename) {
+      const fingerprint = crypto.createHash('sha1').update(contents).digest('base64url');
+      this.filename = `${fingerprint.toString()}.${this.extension}`;
+    }
   }
 
   async write(outputDir: string) {
-    console.log("WRITE: outputDir:", outputDir);
-    console.log("writeFile:", path.resolve(outputDir, this.filename));
     await fs.writeFile(path.resolve(outputDir, this.filename), this.contents);
   }
 
@@ -26,8 +25,8 @@ export class File {
   }
 }
 
-export function outputFile(extension: string, contents: string) {
-  const file = new File(extension, contents);
+export function outputFile(extension: string, contents: string, filename?: string) {
+  const file = new File(extension, contents, filename);
 
   enqueuedFiles.push(file);
 

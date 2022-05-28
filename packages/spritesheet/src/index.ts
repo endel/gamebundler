@@ -5,11 +5,8 @@
 
 import Canvas from "canvas";
 import pack from "bin-pack";
+import crypto from "crypto";
 import cropping from "./detect-edges";
-
-import pkg from "../package.json";
-
-const { homepage, version } = pkg;
 
 const { loadImage, createCanvas } = Canvas;
 
@@ -29,15 +26,20 @@ export interface Options {
    */
   crop?: boolean,
 
-  /**
-   * Name of the image file (for reference in the JSON file)
-   */
-  outputName?: string,
+  // /**
+  //  * Name of the image file (for reference in the JSON file)
+  //  */
+  // outputName?: string,
 
   /**
    * Scale of the output image
    */
   scale?: number,
+
+  /**
+   * Base URL (used for stripping `frameName`)
+   */
+  baseUrl?: string,
 }
 
 export interface JSONOutput {
@@ -66,13 +68,12 @@ const defaultOptions: Options = {
   outputFormat: "png",
   margin: 1,
   crop: true,
-  outputName: "spritesheet.png",
+  // outputName: "spritesheet.png",
   scale: 1,
 };
 
 export default async (paths: string[], options?: Options) => {
-  console.log("Let's generate spritesheet for...", paths);
-  const { outputFormat, margin, crop, outputName, scale } = {
+  const { outputFormat, margin, crop, scale } = {
     ...defaultOptions,
     ...options,
   };
@@ -137,13 +138,19 @@ export default async (paths: string[], options?: Options) => {
     context.drawImage(item.source, x - item.cropped.left + margin, y - item.cropped.top + margin);
   });
 
+  // Write image
+  const image = canvas.toBuffer(`image/${outputFormat}` as "image/png");
+
+  // Determine unique hash
+  const hash = crypto.createHash('sha1').update(image).digest('base64url');
+
   // Write JSON
   const json: JSONOutput = {
     // Global data about the generated file
     meta: {
-      app: homepage,
-      version,
-      image: outputName,
+      app: "https://endel.dev",
+      version: "1.0.0",
+      image: `${hash}.${outputFormat}`,
       size: {
         w: width,
         h: height,
@@ -151,9 +158,12 @@ export default async (paths: string[], options?: Options) => {
       scale,
     },
     frames: items
-      .sort((a, b) => a.item.source.src.localeCompare(b.item.source.src))
+      .sort((a, b) => (a.item.source.src as string).localeCompare(b.item.source.src as string))
       .reduce((acc, { x, y, width: w, height: h, item }) => {
-        acc[item.source.src] = {
+        const frameName = item.source.src as string;
+        console.log({ frameName });
+
+        acc[frameName] = {
           // Position and size in the spritesheet
           frame: {
             x: x + margin,
@@ -180,8 +190,5 @@ export default async (paths: string[], options?: Options) => {
       }, {}),
   };
 
-  // Write image
-  const image = canvas.toBuffer(`image/${outputFormat}` as "image/png");
-
-  return { json, image, };
+  return { json, image, hash };
 };
