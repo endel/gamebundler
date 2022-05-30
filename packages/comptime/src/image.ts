@@ -1,6 +1,8 @@
+import path from "path";
 import generateSpritesheet from "@gamebundler/spritesheet";
 
-import { outputFile } from "./file";
+import { getSourceDirectory } from "./config";
+import { AllowedFilePaths, evaluateFilePaths, outputFile } from "./file";
 
 export type OutputFormat = "png" | "jpeg";
 
@@ -9,7 +11,7 @@ export async function image(path: string, options?: any) {
 }
 
 export async function spritesheet(
-  paths: Array<string | { default: string }>,
+  paths: AllowedFilePaths,
   options: {
     outputFormat?: OutputFormat,
     optimize?: "lossless" | "lossy-high" | "lossy-low" // PngQuant, Zopfli, BASIS
@@ -20,14 +22,14 @@ export async function spritesheet(
   // Force PNG for now
   options.outputFormat = "png";
 
-  const files = paths.map((file) => typeof (file) === "string" ? file : file.default);
+  const files = evaluateFilePaths(paths);
   const result = await generateSpritesheet(files, {
     ...options,
-    baseUrl: get
+    baseUrl: `${getSourceDirectory()}${path.sep}`,
   });
 
   return {
-    image: outputFile("png", result.image.toString(), `${result.hash}.${options.outputFormat}`),
+    image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`),
     json: outputFile("json", JSON.stringify(result.json)) as unknown as string,
   };
 }

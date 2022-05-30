@@ -22,10 +22,7 @@
     "packer"
   ],
   "workspaces": [
-    "packages/comptime",
-    "packages/gamebundler",
-    "packages/runtime",
-    "packages/spritesheet"
+    "packages/*"
   ],
   "author": "Endel Dreyer",
   "license": "MIT",

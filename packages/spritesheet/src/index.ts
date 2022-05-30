@@ -73,7 +73,7 @@ const defaultOptions: Options = {
 };
 
 export default async (paths: string[], options?: Options) => {
-  const { outputFormat, margin, crop, scale } = {
+  const { baseUrl, outputFormat, margin, crop, scale } = {
     ...defaultOptions,
     ...options,
   };
@@ -160,8 +160,10 @@ export default async (paths: string[], options?: Options) => {
     frames: items
       .sort((a, b) => (a.item.source.src as string).localeCompare(b.item.source.src as string))
       .reduce((acc, { x, y, width: w, height: h, item }) => {
-        const frameName = item.source.src as string;
-        console.log({ frameName });
+        const imageSrc = item.source.src as string;
+
+        // remove baseUrl to determine final frame name
+        const frameName = imageSrc.replace(baseUrl, "");
 
         acc[frameName] = {
           // Position and size in the spritesheet

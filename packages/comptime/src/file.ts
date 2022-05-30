@@ -2,17 +2,26 @@ import path from "path";
 import fs from "fs/promises";
 import crypto from "crypto";
 
+export type AllowedFilePaths = Array<string | { default: string }>;
+
+export function evaluateFilePaths(paths: AllowedFilePaths) {
+  return paths.map((file) => typeof (file) === "string" ? file : file.default);
+}
+
+export function getFingerprint(contents: crypto.BinaryLike) {
+  return crypto.createHash("md5").update(contents).digest("base64url").toString();
+}
+
 export const enqueuedFiles: File[] = [];
 
 export class File {
   constructor(
     private extension: string,
-    private contents: string,
+    private contents: crypto.BinaryLike,
     private filename?: string
   ) {
     if (!filename) {
-      const fingerprint = crypto.createHash('sha1').update(contents).digest('base64url');
-      this.filename = `${fingerprint.toString()}.${this.extension}`;
+      this.filename = `${getFingerprint(contents)}.${this.extension}`;
     }
   }
 
@@ -25,7 +34,7 @@ export class File {
   }
 }
 
-export function outputFile(extension: string, contents: string, filename?: string) {
+export function outputFile(extension: string, contents: crypto.BinaryLike, filename?: string) {
   const file = new File(extension, contents, filename);
 
   enqueuedFiles.push(file);

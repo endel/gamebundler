@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import cac from 'cac';
+import { config } from "@gamebundler/comptime";
 
 import { templatePath } from './paths.js';
 
@@ -23,48 +24,37 @@ if (cli.options.help || cli.options.version) {
   process.exit();
 }
 
-// resolve paths
-parsed.options.out = path.resolve(parsed.options.out);
-parsed.options.cacheDir = path.resolve(parsed.options.cacheDir);
+console.log("PARSED:", );
+
+// resolve and set paths
+config.setOutputDirectory(path.resolve(parsed.options.out));
+config.setCacheDir(path.resolve(parsed.options.cacheDir));
 
 // ensure "assets" directory exists
-if (!fs.existsSync(getOutputDirectory())) { fs.mkdirSync(getOutputDirectory()); }
-if (!fs.existsSync(getAssetsDirectory())) { fs.mkdirSync(getAssetsDirectory()); }
-if (!fs.existsSync(getCacheDir())) { fs.mkdirSync(getCacheDir()); }
+if (!fs.existsSync(config.getOutputDirectory())) { fs.mkdirSync(config.getOutputDirectory()); }
+if (!fs.existsSync(config.getAssetsDirectory())) { fs.mkdirSync(config.getAssetsDirectory()); }
+if (!fs.existsSync(config.getCacheDir())) { fs.mkdirSync(config.getCacheDir()); }
 
 // build id
 parsed.id = Math.floor(Math.random() * 1);
 
-// create output directory
-let needCreateDir = false;
-try {
-  const outStat = fs.lstatSync(parsed.options.out);
-  if (!outStat.isDirectory()) {
-    needCreateDir = true;
-  }
-} catch (e: any) {
-  if (e.code === "ENOENT") {
-    needCreateDir = true;
-  } else {
-    throw e;
-  }
-}
-if (needCreateDir) {
-  console.warn("Creating output directory:", parsed.options.out);
-  fs.mkdirSync(parsed.options.out);
-}
-
-/* extract this all to @comptime  */
-export function getOutputDirectory(): string {
-  return parsed.options.out;
-}
-
-export function getAssetsDirectory(): string {
-  return path.resolve(parsed.options.out, "assets");
-}
-
-export function getCacheDir(): string {
-  return parsed.options.cacheDir;
-}
+// // create output directory
+// let needCreateDir = false;
+// try {
+//   const outStat = fs.lstatSync(parsed.options.out);
+//   if (!outStat.isDirectory()) {
+//     needCreateDir = true;
+//   }
+// } catch (e: any) {
+//   if (e.code === "ENOENT") {
+//     needCreateDir = true;
+//   } else {
+//     throw e;
+//   }
+// }
+// if (needCreateDir) {
+//   console.warn("Creating output directory:", parsed.options.out);
+//   fs.mkdirSync(parsed.options.out);
+// }
 
 export default parsed;

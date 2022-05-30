@@ -15,6 +15,7 @@
   "author": "Endel Dreyer",
   "license": "MIT",
   "dependencies": {
-    "@gamebundler/spritesheet": "^1.0.0"
+    "@gamebundler/spritesheet": "^1.0.0",
+    "@gamestdio/audiosprite": "^0.8.2"
   }
 }

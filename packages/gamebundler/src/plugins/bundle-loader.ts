@@ -2,9 +2,8 @@ import fs from 'fs';
 import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
-import { persistEnqueuedFiles } from "@gamebundler/comptime";
+import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
 
-import { getAssetsDirectory, getCacheDir, getOutputDirectory } from '../cli-parsed.js';
 import { isDevelopment } from "../dev.js";
 import { fileLoaderPlugin } from './file-loader.js';
 
@@ -13,9 +12,11 @@ import { fileLoaderPlugin } from './file-loader.js';
 // => https://github.com/evanw/esbuild/pull/1881
 //
 
-function buildAssetBundle(path: string) {
+function buildAssetBundle(entrypoint: string) {
+  config.setSourceDirectory(path.dirname(entrypoint));
+
   return esbuild.build({
-    entryPoints: [path],
+    entryPoints: [entrypoint],
     format: "esm",
     platform: "browser",
     sourcemap: false,
@@ -24,7 +25,7 @@ function buildAssetBundle(path: string) {
     external: ["@gamebundler/comptime"],
     plugins: [fileLoaderPlugin], // ,
     minify: !isDevelopment,
-    outdir: getCacheDir(),
+    outdir: config.getCacheDir(),
   });
 }
 
@@ -55,7 +56,7 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
         console.error("ERROR - bundle-loader:", e);
       }
 
-      await persistEnqueuedFiles(getAssetsDirectory());
+      await persistEnqueuedFiles(config.getAssetsDirectory());
 
       let contents: string = "";
 
@@ -66,6 +67,8 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
         } else {
           contents += `export const ${key} = `;
         }
+
+        console.log(`export ${key} =>`, exports[key]);
 
         contents += JSON.stringify(exports[key]) + ";\n";
       }
