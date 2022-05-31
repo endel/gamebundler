@@ -54,6 +54,10 @@ if (isDevelopment) {
   const wss = new ws.WebSocketServer({ server: rawServer });
   wss.on('connection', (socket) => {
     devEvents.on('reload', () => socket.send(JSON.stringify({ type: 'reload' })));
-    devEvents.on('error', (err) => socket.send(JSON.stringify({ type: 'error', message: err.stack })));
+    devEvents.on('error', (err) => socket.send(JSON.stringify({
+      type: 'error',
+      message: err.message,
+      stack: err.stack,
+    })));
   });
 }

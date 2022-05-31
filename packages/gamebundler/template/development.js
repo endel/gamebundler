@@ -14,7 +14,12 @@
 
     } else if (data.type === "error") {
       console.error(data.message);
-      errorMessageContainer.innerHTML = data.message;
+      errorMessageContainer.innerHTML = `
+        <button class="close">X</button>
+        <h2>Build error:</h2>
+        <span class="error">${data.message}</span>
+        ${data.stack ? `<pre class="stack">${data.stack}</pre>` : ""}
+      `;
       errorMessageContainer.classList.add("active");
 
     } else {

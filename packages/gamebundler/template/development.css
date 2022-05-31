@@ -3,26 +3,45 @@ body {
 }
 
 div.gamebundle-error {
-  display: none;
   pointer-events: none;
+  display: none;
 
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50vh;
-  font-family: 'Courier New', Courier, monospace;
-
-  /* background-color: #fcc; */
-  background-color: rgba(255, 204, 204, 0.8);
-
-  border: 1px solid #f00;
-  padding: 1em;
-  margin: 1em;
-  color: #0f0f0f;
+  position: fixed;
+  box-sizing: border-box;
+  inset: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: rgb(232, 232, 232);
+  font-family: Menlo, Consolas, monospace;
+  font-size: large;
+  padding: 2rem;
+  line-height: 1.2;
+  overflow: auto;
 }
 
 div.gamebundle-error.active {
   pointer-events: all;
   display: block;
+}
+
+div.gamebundle-error .error,
+div.gamebundle-error .stack {
+  white-space: pre-wrap;
+  margin-top: 1em;
+}
+
+div.gamebundle-error .error {
+  color: rgb(227, 96, 73);
+}
+
+/* close button */
+div.gamebundle-error button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  float: right;
 }
