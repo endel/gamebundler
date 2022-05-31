@@ -20,11 +20,13 @@
     "http-server": "^14.1.0",
     "open": "^8.4.0",
     "ts-node": "^10.7.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "ws": "^8.7.0"
   },
   "devDependencies": {
     "@gamebundler/comptime": "^1.0.0",
     "@gamebundler/runtime": "^1.0.0",
-    "@types/http-server": "^0.12.1"
+    "@types/http-server": "^0.12.1",
+    "@types/ws": "^8.5.3"
   }
 }

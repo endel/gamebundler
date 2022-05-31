@@ -1,0 +1,28 @@
+body {
+  /* padding: 1em; */
+}
+
+div.gamebundle-error {
+  display: none;
+  pointer-events: none;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  font-family: 'Courier New', Courier, monospace;
+
+  /* background-color: #fcc; */
+  background-color: rgba(255, 204, 204, 0.8);
+
+  border: 1px solid #f00;
+  padding: 1em;
+  margin: 1em;
+  color: #0f0f0f;
+}
+
+div.gamebundle-error.active {
+  pointer-events: all;
+  display: block;
+}

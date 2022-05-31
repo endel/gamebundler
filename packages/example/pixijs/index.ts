@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { sound } from "@pixi/sound";
 import { canvas } from "@gamebundler/runtime";
 
 import { spritesheet, audio } from "./assets.bundle";
@@ -7,6 +8,10 @@ import { spritesheet, audio } from "./assets.bundle";
 
 console.log("RAW AUDIOSPRITE:", audio);
 console.log("RAW SPRITESHEET:", spritesheet);
+
+// console.log("WHERE'S MY SOUND??");
+const sounds = sound.add(audio.resources[0], audio.spritemap);
+// console.log("SOUNDS", sounds);
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 PIXI.settings.ROUND_PIXELS = true;
@@ -38,9 +43,6 @@ loader.load(() => {
   // app.stage.addChild(sprite);
 
   app.stage.addChild(animation);
-
-  console.log({ animation });
-
   console.log("COMPLETE!")
 });
 
