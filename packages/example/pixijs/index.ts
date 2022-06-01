@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { sound } from "@pixi/sound";
+import * as Sound from "@pixi/sound";
 import { canvas } from "@gamebundler/runtime";
 
 import { spritesheet, audio } from "./assets.bundle";
@@ -10,7 +10,11 @@ console.log("RAW AUDIOSPRITE:", audio);
 console.log("RAW SPRITESHEET:", spritesheet);
 
 // console.log("WHERE'S MY SOUND??");
-const sounds = sound.add(audio.resources[0], audio.spritemap);
+const sounds = Sound.Sound.from({
+  url: audio.resources[0],
+  sprites: audio.spritemap
+});
+
 // console.log("SOUNDS", sounds);
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
@@ -38,6 +42,15 @@ loader.load(() => {
   ]);
   animation.animationSpeed = 0.2;
   animation.play();
+
+  animation.interactive = true;
+  animation.addListener("click", () => {
+    // number from 1 to 3
+    const soundNum = Math.floor(Math.random() * 3) + 1;
+    console.log("CLICKED", { soundNum });
+    sounds.play(`switch${soundNum}`);
+  });
+
 
   // const sprite = new PIXI.Sprite(sheet.textures['assets/ball/bottom-0.png']);
   // app.stage.addChild(sprite);
