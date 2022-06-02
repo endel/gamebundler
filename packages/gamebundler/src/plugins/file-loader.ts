@@ -1,16 +1,18 @@
 import fs from 'fs';
 import path from 'path';
+import fastGlob from 'fast-glob';
 import esbuild from "@netlify/esbuild";
 import { config } from "@gamebundler/comptime";
 import parsed from '../cli-parsed.js';
 
-function isPartOfBundle(build: esbuild.PluginBuild) {
+export function isPartOfBundle(build: esbuild.PluginBuild) {
   return (
     build.initialOptions.write === false &&
     build.initialOptions.outdir === config.getCacheDir()
   );
 }
 
+export const FILE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'svg', 'xml', 'webp', 'aiff', 'wav', 'ac3', 'mp3', 'mp4', 'm4a', 'ogg', 'opus', 'webm'];
 
 /**
  * File Loader Plugin
@@ -22,7 +24,7 @@ export const fileLoaderPlugin: esbuild.Plugin = {
   setup(build) {
     const isBundle = isPartOfBundle(build);
 
-    build.onLoad({ filter: /\.(png|jpg|jpeg|svg|xml|webp|aiff|wav|ac3|mp3|mp4|m4a|ogg|opus|webm)$/ }, async (args) => {
+    build.onLoad({ filter: new RegExp(String.raw`\.(${FILE_EXTENSIONS.join('|')})$`) }, async (args) => {
       let destiny: string;
 
       if (!isBundle) {

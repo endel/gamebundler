@@ -2,12 +2,13 @@ import * as PIXI from "pixi.js";
 import * as Sound from "@pixi/sound";
 import { canvas } from "@gamebundler/runtime";
 
+// import { spritesheet, audio } from "./assets.bundle";
 import { spritesheet, audio } from "./assets.bundle";
 
 (window as any).PIXI = PIXI;
 
 console.log("RAW AUDIOSPRITE:", audio);
-console.log("RAW SPRITESHEET:", spritesheet);
+// console.log("RAW SPRITESHEET:", spritesheet);
 
 // console.log("WHERE'S MY SOUND??");
 const sounds = Sound.Sound.from({

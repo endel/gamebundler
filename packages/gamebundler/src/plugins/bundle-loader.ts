@@ -5,7 +5,9 @@ import esbuild from '@netlify/esbuild';
 import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
 
 import { isDevelopment } from "../dev.js";
+
 import { fileLoaderPlugin } from './file-loader.js';
+import { wildcardFileLoaderPlugin } from './wildcard-file-loader.js';
 
 //
 // possibly relevant: `build.onResolve()`
@@ -23,7 +25,7 @@ function buildAssetBundle(entrypoint: string) {
     write: false,
     bundle: true,
     external: ["@gamebundler/comptime"],
-    plugins: [fileLoaderPlugin], // ,
+    plugins: [wildcardFileLoaderPlugin, fileLoaderPlugin], // ,
     minify: !isDevelopment,
     outdir: config.getCacheDir(),
   });
