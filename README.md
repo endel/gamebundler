@@ -8,6 +8,7 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
 
 # TODO:
 
+- Support multiple image scale ratios (e.g. 0.5x, 2x, 3x, etc.)
 - Live-reload when `.bundle.ts` changed (must re-generate assets)
 - Cache mechanism to avoid re-generating assets without changes
 - Integrate framework's loader system to allow end user to consume the asset
@@ -15,7 +16,7 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
 - Single-component "Playground"
 - Component-driven / Storybook / "Playground"
 - Dynamically importing, loading, and using a `.bundle.ts`
-- Dynamically importing and executing code for "game levels"
+- Dynamically importing and executing code as "game levels"
 
 **Nice to have**
 

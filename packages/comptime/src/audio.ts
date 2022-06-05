@@ -4,10 +4,12 @@ import generateAudioSprite, { AudioSpriteOptions, AudioSpriteOutput } from "@gam
 import { AllowedFilePaths, evaluateFilePaths, getFingerprint } from "./file";
 import { getAssetsDirectory, getCacheDir, getOutputDirectory, getSourceDirectory } from "./config";
 
+type AudioSpriteReturnType = AudioSpriteOutput['default'] & {type: "audiosprite"};
+
 export async function audiosprite(
   paths: AllowedFilePaths,
   options: AudioSpriteOptions<'default'> = {}
-): Promise<AudioSpriteOutput['default']> {
+): Promise<AudioSpriteReturnType> {
   const files = evaluateFilePaths(paths);
 
   options.output = path.resolve(getAssetsDirectory(), getFingerprint(files.join(",")));
@@ -23,7 +25,8 @@ export async function audiosprite(
   result.resources = result.resources.map((resource) =>
     resource.replace(baseUrl, ""));
 
-  console.log("generateAudioSprite, result =>", result);
-
-  return result;
+  return {
+    type: "audiosprite",
+    ...result
+  };
 }

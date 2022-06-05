@@ -17,6 +17,7 @@ export async function spritesheet(
     optimize?: "lossless" | "lossy-high" | "lossy-low" // PngQuant, Zopfli, BASIS
     margin?: number;
     crop?: boolean;
+    scale?: number;
   } = {}
 ) {
   // Force PNG for now
@@ -29,6 +30,7 @@ export async function spritesheet(
   });
 
   return {
+    type: "spritesheet",
     image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`),
     json: outputFile("json", JSON.stringify(result.json)) as unknown as string,
   };

@@ -1,4 +1,3 @@
-import fs from 'fs';
 import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
@@ -25,6 +24,7 @@ function buildAssetBundle(entrypoint: string) {
     write: false,
     bundle: true,
     external: ["@gamebundler/comptime"],
+    // assetNames:
     plugins: [wildcardFileLoaderPlugin, fileLoaderPlugin], // ,
     minify: !isDevelopment,
     outdir: config.getCacheDir(),

@@ -22,10 +22,12 @@ export const spritesheet = await comptime.spritesheet([
   // require('./assets/ball/top-0.png'),
   // require('./assets/ball/top-1.png'),
   // require('./assets/ball/top-2.png'),
-]);
+], { scale: 2 });
 
 export const audio = await comptime.audiosprite([
-  require('./assets/sound/switch1.ogg'),
-  require('./assets/sound/switch2.ogg'),
-  require('./assets/sound/switch3.ogg'),
+  require('./assets/sound/*.ogg'),
+
+  // require('./assets/sound/switch1.ogg'),
+  // require('./assets/sound/switch2.ogg'),
+  // require('./assets/sound/switch3.ogg'),
 ]);

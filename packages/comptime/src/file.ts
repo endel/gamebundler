@@ -2,14 +2,19 @@ import path from "path";
 import fs from "fs/promises";
 import crypto from "crypto";
 
-export type AllowedFilePaths = Array<
+type FilePath =
   string
   | { default: string } // require
   | Array<{ default: string }> // import + wildcard
   | { default: Array<{ default: string }> } // require + wildcard
->;
 
-export function evaluateFilePaths(paths: AllowedFilePaths) {
+export type AllowedFilePaths = Array<FilePath>;
+
+export function evaluateFilePaths(paths: AllowedFilePaths | FilePath) {
+  if (!Array.isArray(paths)) {
+    return evaluateFilePaths([paths])
+  }
+
   // first pass, check for wildcard paths
   return paths.flatMap((file) => {
     if (typeof (file) === "string") {

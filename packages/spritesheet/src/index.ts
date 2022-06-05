@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2022 Endel Dreyer
  * Copyright (c) 2020 Pencil.js
  * https://github.com/pencil-js/spritesheet/
  */
@@ -78,11 +79,6 @@ export default async (paths: string[], options?: Options) => {
     ...options,
   };
 
-  //
-  // TODO: effectively use "scale"
-  // (currently not in use)
-  //
-
   // Check input path
   if (!paths || !paths.length) {
     throw new Error("No file given.");
@@ -100,18 +96,17 @@ export default async (paths: string[], options?: Options) => {
   // const { homepage, version } = JSON.parse(pkgJSON.toString());
 
   // Load all images
-  const loads = paths.map(path => loadImage(path));
-  const images = await Promise.all(loads);
+  const images = await Promise.all(paths.map(path => loadImage(path)));
 
   const playground = createCanvas(undefined, undefined); // TODO: is it required to provide size here?
   const playgroundContext = playground.getContext("2d");
 
-  // Crop all image
+  // Crop all images, applying scale
   const data = await Promise.all(images.map(async (source) => {
     const { width, height } = source;
-    playground.width = width;
-    playground.height = height;
-    playgroundContext.drawImage(source, 0, 0);
+    playground.width = width * scale;
+    playground.height = height * scale;
+    playgroundContext.drawImage(source, 0, 0, playground.width, playground.height);
 
     const cropped = crop ? await cropping(playground) : {
       top: 0,
@@ -120,8 +115,8 @@ export default async (paths: string[], options?: Options) => {
       left: 0,
     };
     return {
-      width: (width - cropped.left - cropped.right) + margin,
-      height: (height - cropped.top - cropped.bottom) + margin,
+      width: (playground.width - cropped.left - cropped.right) + margin,
+      height: (playground.height - cropped.top - cropped.bottom) + margin,
       source,
       cropped,
     };
@@ -135,7 +130,8 @@ export default async (paths: string[], options?: Options) => {
 
   // Draw all images on the destination canvas
   items.forEach(({ x, y, item }) => {
-    context.drawImage(item.source, x - item.cropped.left + margin, y - item.cropped.top + margin);
+    // context.drawImage(item.source, x - item.cropped.left + margin, y - item.cropped.top + margin);
+    context.drawImage(item.source, x - item.cropped.left + margin, y - item.cropped.top + margin, item.source.width * scale, item.source.height * scale);
   });
 
   // Write image
@@ -143,6 +139,8 @@ export default async (paths: string[], options?: Options) => {
 
   // Determine unique hash
   const hash = crypto.createHash('sha1').update(image).digest('base64url');
+
+  console.log({ width, height })
 
   // Write JSON
   const json: JSONOutput = {

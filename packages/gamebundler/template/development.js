@@ -22,6 +22,10 @@
       `;
       errorMessageContainer.classList.add("active");
 
+      errorMessageContainer.querySelector(".close").addEventListener("click", () => {
+        errorMessageContainer.classList.remove("active");
+      });
+
     } else {
       console.log(data);
     }

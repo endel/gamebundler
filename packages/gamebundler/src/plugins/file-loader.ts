@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import fastGlob from 'fast-glob';
 import esbuild from "@netlify/esbuild";
 import { config } from "@gamebundler/comptime";
 import parsed from '../cli-parsed.js';
