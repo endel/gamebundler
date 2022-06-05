@@ -1,6 +1,6 @@
 # 🕹📦 Web Game Compiler and Asset Bundler
 
-A build tool with _some_ compile-time optimizations to handle your game assets. Built on top of [`esbuild`](https://esbuild.github.io/).
+A modern build tool for crafting HTML5 games. Features compile-time asset building and asset optimization. Built on top of [`esbuild`](https://esbuild.github.io/).
 
 > **Warning**
 > This is an experimental piece of software that may change its API's at any point. **Use at your own risk.**
@@ -14,6 +14,8 @@ A build tool with _some_ compile-time optimizations to handle your game assets. 
 - Generate manifest of each `.bundle` - remove unused assets when a new one is generated.
 - Single-component "Playground"
 - Component-driven / Storybook / "Playground"
+- Dynamically importing, loading, and using a `.bundle.ts`
+- Dynamically importing and executing code for "game levels"
 
 **Nice to have**
 
