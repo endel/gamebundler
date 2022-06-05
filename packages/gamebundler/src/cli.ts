@@ -5,10 +5,11 @@ import esbuild from '@netlify/esbuild';
 
 import { fileLoaderPlugin } from './plugins/file-loader.js';
 import { bundleLoaderPlugin } from './plugins/bundle-loader.js';
+import { wildcardFileLoaderPlugin } from './plugins/wildcard-file-loader.js';
+import { rawLoaderPlugin } from './plugins/raw-loader.js';
 
 import cli from './cli-parsed.js';
 import { devEvents, isDevelopment, devServer } from './dev.js';
-import { wildcardFileLoaderPlugin } from './plugins/wildcard-file-loader.js';
 
 //
 // TODO?
@@ -33,7 +34,12 @@ esbuild
       js: "// built with gamebundler\n// https://github.com/endel/gamebundler",
       css: "/* built with gamebundler */\n/* https://github.com/endel/gamebundler */",
     },
-    plugins: [bundleLoaderPlugin, wildcardFileLoaderPlugin, fileLoaderPlugin,],
+    plugins: [
+      bundleLoaderPlugin,
+      wildcardFileLoaderPlugin,
+      fileLoaderPlugin,
+      rawLoaderPlugin,
+    ],
     // treeShaking: true,
     // target: "es2020,chrome58,edge16,firefox57,ie11,ios10,node12,opera45,safari11",
 

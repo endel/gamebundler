@@ -91,10 +91,6 @@ export default async (paths: string[], options?: Options) => {
     throw new Error(`outputFormat should only be one of ${supported}, but "${outputFormat}" was given.`);
   }
 
-  // // FIXME: can read JSON module when supported
-  // const pkgJSON = await readFile(new URL("../package.json", __dirname));
-  // const { homepage, version } = JSON.parse(pkgJSON.toString());
-
   // Load all images
   const images = await Promise.all(paths.map(path => loadImage(path)));
 
@@ -139,8 +135,6 @@ export default async (paths: string[], options?: Options) => {
 
   // Determine unique hash
   const hash = crypto.createHash('sha1').update(image).digest('base64url');
-
-  console.log("SPRITESHEET", { width, height, scale })
 
   // Write JSON
   const json: JSONOutput = {

@@ -24,8 +24,6 @@ if (cli.options.help || cli.options.version) {
   process.exit();
 }
 
-console.log("PARSED:", );
-
 // resolve and set paths
 config.setOutputDirectory(path.resolve(parsed.options.out));
 config.setCacheDir(path.resolve(parsed.options.cacheDir));

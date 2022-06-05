@@ -3,7 +3,7 @@
   "name": "example",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ../../node_modules/gamebundler/lib/cli.js ./pixijs/index.ts",
+    "start": "node --experimental-loader ../../node_modules/gamebundler/lib/utils/node-loader.js ../../node_modules/gamebundler/lib/cli.js ./pixijs/index.ts",
     "start-final": "gamebundler ./pixijs/index.ts",
     "playcanvas": "gamebundler .playcanvas/index.ts",
     "phaser": "gamebundler ./phaser/index.ts"

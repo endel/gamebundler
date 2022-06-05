@@ -1,12 +1,14 @@
 import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
+// import { Worker } from 'worker_threads';
 import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
 
 import { isDevelopment } from "../dev.js";
 
 import { fileLoaderPlugin } from './file-loader.js';
 import { wildcardFileLoaderPlugin } from './wildcard-file-loader.js';
+import { rawLoaderPlugin } from './raw-loader.js';
 
 //
 // possibly relevant: `build.onResolve()`
@@ -25,7 +27,7 @@ function buildAssetBundle(entrypoint: string) {
     bundle: true,
     external: ["@gamebundler/comptime"],
     // assetNames:
-    plugins: [wildcardFileLoaderPlugin, fileLoaderPlugin], // ,
+    plugins: [wildcardFileLoaderPlugin, fileLoaderPlugin, rawLoaderPlugin], // ,
     minify: !isDevelopment,
     outdir: config.getCacheDir(),
   });
@@ -47,6 +49,14 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           await fsPromises.writeFile(file.path, file.text);
 
           try {
+            /**
+             * FIXME:
+             *
+             * Need to un-import the module to be able to import (and execute) it again
+             * We're currently relying on --experimental-loader (see `utils/node-loader.ts`) to support this.
+             *
+             * (More info https://github.com/nodejs/modules/issues/307)
+             */
             exports = await import(file.path);
 
           } catch (e) {

@@ -39,6 +39,7 @@ loader.load(() => {
   const sheet = loader.resources['spritesheet'];
   console.log("sheet:", sheet);
   console.log("textures:", sheet.textures);
+  console.log("num textures:", Object.keys(sheet.textures).length);
 
   const bottom = new PIXI.AnimatedSprite([
     sheet.textures['assets/ball/bottom-0.png'],

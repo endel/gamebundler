@@ -1,20 +1,26 @@
 # 🕹📦 Web Game Compiler and Asset Bundler
 
-A modern build tool for crafting HTML5 games. Features compile-time asset building and asset optimization. Built on top of [`esbuild`](https://esbuild.github.io/).
+A modern build tool for crafting HTML5 games. Features compile-time asset building and industry standards asset optimization. Built on top of [`esbuild`](https://esbuild.github.io/).
 
 > **Warning**
 > This is an experimental piece of software that may change its API's at any point. **Use at your own risk.**
 
 # TODO:
 
-- Live-reload when `.bundle.ts` changed (must re-generate assets)
-- Generate manifest of each `.bundle` - remove unused assets when a new one is generated.
-- Cache mechanism to avoid re-generating assets without changes
-- Integrate framework's loader system to allow end user to consume the asset
-- Dynamically importing, loading, and using a `.bundle.ts`
-- Dynamically importing and executing code as "game levels"
-- Component-driven / Storybook / "Playground" (Single-component "Playground")
-- Support multiple image scale ratios (e.g. 0.5x, 2x, 3x, etc.)
+- [x] Live-reload when `.bundle.ts` changed (must re-generate assets)
+- [ ] Generate manifest of each `.bundle` - remove unused assets when a new one is generated.
+- [ ] Integrate framework's loader system to allow end user to consume the asset [runtime, feature]
+- [ ] Support compressing textures using BASIS algorithm
+- [ ] Cache mechanism to avoid re-generating assets without changes [devmode, optimization]
+- [ ] Dynamically importing, loading, and using a `.bundle.ts`
+- [ ] Dynamically importing and executing code as "game levels"
+- [ ] Component-driven / Storybook / "Playground" (Single-component "Playground")
+- [ ] Support multiple image scale ratios (e.g. 0.5x, 2x, 3x, etc.)
+
+**Import types**
+
+- WebGL Shaders (GLSL: glsl|wgsl|vert|frag|vs|fs)
+- Web GPU Shaders (WGSL)
 
 **Nice to have**
 
