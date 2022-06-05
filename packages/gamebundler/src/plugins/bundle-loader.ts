@@ -70,7 +70,7 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           contents += `export const ${key} = `;
         }
 
-        console.log(`export ${key} =>`, exports[key]);
+        // console.log(`export ${key} =>`, exports[key]);
 
         contents += JSON.stringify(exports[key]) + ";\n";
       }

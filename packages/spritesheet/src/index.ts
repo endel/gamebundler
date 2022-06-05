@@ -140,7 +140,7 @@ export default async (paths: string[], options?: Options) => {
   // Determine unique hash
   const hash = crypto.createHash('sha1').update(image).digest('base64url');
 
-  console.log({ width, height })
+  console.log("SPRITESHEET", { width, height, scale })
 
   // Write JSON
   const json: JSONOutput = {

@@ -20,7 +20,7 @@ console.log("SOUNDS", sounds);
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 PIXI.settings.ROUND_PIXELS = true;
-PIXI.settings.RESOLUTION = window.devicePixelRatio * 2;
+// PIXI.settings.RESOLUTION = window.devicePixelRatio * 2;
 
 const app = new PIXI.Application({
   view: canvas,
@@ -28,6 +28,10 @@ const app = new PIXI.Application({
 });
 
 app.start();
+
+const container = new PIXI.Container();
+container.scale.set(10);
+app.stage.addChild(container);
 
 const loader = PIXI.Loader.shared;
 loader.add("spritesheet", bundle.spritesheet.json);
@@ -43,7 +47,12 @@ loader.load(() => {
   ]);
   bottom.animationSpeed = 0.2;
   bottom.play();
-  app.stage.addChild(bottom);
+
+  const border = new PIXI.Graphics();
+  border.beginFill(0xFF0000);
+  border.drawRect(bottom.x, bottom.y, bottom.width, bottom.height, );
+  container.addChild(border);
+  container.addChild(bottom);
 
   bottom.interactive = true;
   bottom.addListener("click", () => {
@@ -58,9 +67,10 @@ loader.load(() => {
     sheet.textures['assets/ball/left-1.png'],
     sheet.textures['assets/ball/left-2.png'],
   ]);
+  left.x = 30;
   left.animationSpeed = 0.2;
   left.play();
-  app.stage.addChild(bottom);
+  container.addChild(left);
 
 
   // const sprite = new PIXI.Sprite(sheet.textures['assets/ball/bottom-0.png']);
