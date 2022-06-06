@@ -2,7 +2,7 @@ import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
 // import { Worker } from 'worker_threads';
-import { config, bundle } from "@gamebundler/comptime";
+import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
 
 import { isDevelopment } from "../dev.js";
 
@@ -68,7 +68,7 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
         console.error("ERROR - bundle-loader:", e);
       }
 
-      await bundle(config.getAssetsDirectory());
+      await persistEnqueuedFiles(config.getAssetsDirectory());
 
       let contents: string = "";
 
