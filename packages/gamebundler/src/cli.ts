@@ -18,6 +18,8 @@ import { devEvents, isDevelopment, devServer } from './dev.js';
 
 // TODO: support importing CSS
 
+const onBuildSuccessful = () => console.log(`${String.fromCodePoint(0x2705)} Build successful!`);
+
 esbuild
   .build({
     // format: "iife", // FIXME: only required for TLA (top-level await)
@@ -46,12 +48,12 @@ esbuild
     watch: (!isDevelopment) ? false : {
       onRebuild(err, result) {
         if (err) {
-          console.error('watch build failed:', err);
+          console.error(`${String.fromCodePoint(0x274C)} Watch build failed:`, err);
           devEvents.emit('error', err);
           return;
         }
 
-        console.log('watch build succeeded:', result);
+        onBuildSuccessful();
         devEvents.emit('reload');
       },
     },
@@ -61,11 +63,11 @@ esbuild
     const port = process.env.PORT || 8000;
 
     devServer?.listen(port, () => {
-      console.log(`Serving at localhost:${port}`);
+      console.log(`Serving at http://localhost:${port}`);
       open(`http://localhost:${port}`);
     });
 
-    console.log("compilation success", r);
+    onBuildSuccessful();
   })
 
   .catch(() => process.exit(1));

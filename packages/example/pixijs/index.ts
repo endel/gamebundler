@@ -34,7 +34,12 @@ container.scale.set(10);
 app.stage.addChild(container);
 
 const loader = PIXI.Loader.shared;
+
+console.log("IMAGE", bundle.image);
+
 loader.add("spritesheet", bundle.spritesheet.json);
+loader.add("image", bundle.image);
+
 loader.load(() => {
   const sheet = loader.resources['spritesheet'];
   console.log("sheet:", sheet);
@@ -73,9 +78,10 @@ loader.load(() => {
   left.play();
   container.addChild(left);
 
-
-  // const sprite = new PIXI.Sprite(sheet.textures['assets/ball/bottom-0.png']);
-  // app.stage.addChild(sprite);
+  const image = PIXI.Sprite.from("image");
+  image.x = 15;
+  image.y = 15;
+  container.addChild(image);
 
   console.log("COMPLETE!")
 });

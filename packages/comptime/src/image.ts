@@ -1,20 +1,29 @@
+import fs from "fs";
 import path from "path";
 import generateSpritesheet from "@gamebundler/spritesheet";
 
 import { getSourceDirectory } from "./config";
-import { AllowedFilePaths, evaluateFilePaths, outputFile } from "./file";
+import { AllowedFilePaths, evaluateFilePath, evaluateFilePaths, outputFile } from "./file";
+
+type ImageOptimization = "lossless" | "lossy-high" | "lossy-low" // PngQuant, Zopfli, BASIS
 
 export type OutputFormat = "png" | "jpeg";
 
-export async function image(path: string, options?: any) {
-  return path;
+export async function image(
+  path: string,
+  options?: {
+    format?: OutputFormat,
+    optimization?: ImageOptimization,
+  }
+) {
+  return outputFile("png", await fs.promises.readFile(evaluateFilePath(path) as string));
 }
 
 export async function spritesheet(
   paths: AllowedFilePaths,
   options: {
     outputFormat?: OutputFormat,
-    optimize?: "lossless" | "lossy-high" | "lossy-low" // PngQuant, Zopfli, BASIS
+    optimize?: ImageOptimization,
     margin?: number;
     crop?: boolean;
     scale?: number;

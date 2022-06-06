@@ -1,6 +1,8 @@
-import comptime from "@gamebundler/comptime";
+import bundle from "@gamebundler/comptime";
 
-export const spritesheet = await comptime.spritesheet([
+export const image = await bundle.image(require("./assets/emotes/heart.png"));
+
+export const spritesheet = await bundle.spritesheet([
   // require('./assets/ball/*.png'),
 
   require('./assets/ball/bottom-0.png'),
@@ -11,9 +13,9 @@ export const spritesheet = await comptime.spritesheet([
   require('./assets/ball/left-1.png'),
   require('./assets/ball/left-2.png'),
 
-  // require('./assets/ball/bottom-left-0.png'),
-  // require('./assets/ball/bottom-left-1.png'),
-  // require('./assets/ball/bottom-left-2.png'),
+  require('./assets/ball/bottom-left-0.png'),
+  require('./assets/ball/bottom-left-1.png'),
+  require('./assets/ball/bottom-left-2.png'),
 
   // require('./assets/ball/top-left-0.png'),
   // require('./assets/ball/top-left-1.png'),
@@ -24,7 +26,7 @@ export const spritesheet = await comptime.spritesheet([
   // require('./assets/ball/top-2.png'),
 ]);
 
-export const audio = await comptime.audiosprite([
+export const audio = await bundle.audiosprite([
   require('./assets/sound/*.ogg'),
 
   // require('./assets/sound/switch1.ogg'),

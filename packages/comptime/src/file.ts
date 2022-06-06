@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs/promises";
 import crypto from "crypto";
 
-type FilePath =
+export type FilePath =
   string
   | { default: string } // require
   | Array<{ default: string }> // import + wildcard
@@ -10,26 +10,28 @@ type FilePath =
 
 export type AllowedFilePaths = Array<FilePath>;
 
+export function evaluateFilePath(file: FilePath) {
+  if (typeof (file) === "string") {
+    return file;
+
+  } else if (Array.isArray(file)) {
+    return file.map((f) => f.default);
+
+  } else if (Array.isArray(file.default)) {
+    return file.default.map((f) => f.default);
+
+  } else if (typeof (file.default) === "string") {
+    return file.default;
+  }
+}
+
 export function evaluateFilePaths(paths: AllowedFilePaths | FilePath) {
   if (!Array.isArray(paths)) {
     return evaluateFilePaths([paths])
   }
 
   // first pass, check for wildcard paths
-  return paths.flatMap((file) => {
-    if (typeof (file) === "string") {
-      return file;
-
-    } else if (Array.isArray(file)) {
-      return file.map((f) => f.default);
-
-    } else if (Array.isArray(file.default)) {
-      return file.default.map((f) => f.default);
-
-    } else if (typeof (file.default) === "string") {
-      return file.default;
-    }
-  });
+  return paths.flatMap((file) => evaluateFilePath(file));
 }
 
 export function getFingerprint(contents: crypto.BinaryLike) {
