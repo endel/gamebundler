@@ -50,8 +50,7 @@ export class File {
   }
 
   async write(outputDir: string) {
-    const result = await fs.writeFile(path.resolve(outputDir, this.filename), this.contents);
-    console.log("WRITTEN IN FILE??", path.resolve(outputDir, this.filename), result)
+    await fs.writeFile(path.resolve(outputDir, this.filename), this.contents);
   }
 
   toJSON() {
@@ -69,8 +68,6 @@ export function outputFile(extension: string, contents: crypto.BinaryLike, filen
 
 export async function persistEnqueuedFiles(outputDir: string) {
   const files = enqueuedFiles.slice(0);
-
-  console.log("persistEnqueuedFiles", files);
 
   enqueuedFiles.length = 0;
 
