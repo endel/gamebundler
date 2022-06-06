@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import generateSpritesheet from "@gamebundler/spritesheet";
 
+import { getCurrentManifest } from "./manifest";
 import { getSourceDirectory } from "./config";
 import { AllowedFilePaths, evaluateFilePath, evaluateFilePaths, outputFile } from "./file";
 
@@ -16,7 +17,10 @@ export async function image(
     optimization?: ImageOptimization,
   }
 ) {
-  return outputFile("png", await fs.promises.readFile(evaluateFilePath(path) as string));
+  const filepath = evaluateFilePath(path) as string;
+  return await getCurrentManifest().cache([filepath], options, async () => {
+    return outputFile("png", await fs.promises.readFile(filepath));
+  });
 }
 
 export async function spritesheet(
@@ -33,14 +37,17 @@ export async function spritesheet(
   options.outputFormat = "png";
 
   const files = evaluateFilePaths(paths);
-  const result = await generateSpritesheet(files, {
-    ...options,
-    baseUrl: `${getSourceDirectory()}${path.sep}`,
-  });
 
-  return {
-    type: "spritesheet",
-    image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`),
-    json: outputFile("json", JSON.stringify(result.json)) as unknown as string,
-  };
+  return await getCurrentManifest().cache(files, options, async () => {
+    const result = await generateSpritesheet(files, {
+      ...options,
+      baseUrl: `${getSourceDirectory()}${path.sep}`,
+    });
+
+    return {
+      type: "spritesheet",
+      image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`),
+      json: outputFile("json", JSON.stringify(result.json)) as unknown as string,
+    };
+  });
 }

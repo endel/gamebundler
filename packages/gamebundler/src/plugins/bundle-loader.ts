@@ -1,8 +1,8 @@
 import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
-// import { Worker } from 'worker_threads';
 import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
+import * as manifest from "@gamebundler/comptime/lib/manifest.js";
 
 import { isDevelopment } from "../dev.js";
 
@@ -15,7 +15,7 @@ import { rawLoaderPlugin } from './raw-loader.js';
 // => https://github.com/evanw/esbuild/pull/1881
 //
 
-function buildAssetBundle(entrypoint: string) {
+function buildBundleSources(entrypoint: string) {
   config.setSourceDirectory(path.dirname(entrypoint));
 
   return esbuild.build({
@@ -41,8 +41,11 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
       let exports: any = {};
 
       try {
-        const bundle = await buildAssetBundle(args.path);
-        await Promise.all(bundle.outputFiles.map(async (file) => {
+        const bundleSources = await buildBundleSources(args.path);
+
+        manifest.initialize(args.path);
+
+        await Promise.all(bundleSources.outputFiles.map(async (file) => {
           file.path = file.path.replace(".js", ".mjs");
 
           // write compiled file
@@ -51,6 +54,8 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           try {
             /**
              * FIXME:
+             *
+             * TODO: use worker_threads (`node-canvas` does not support worker_threads: https://github.com/Automattic/node-canvas/issues/1394)
              *
              * Need to un-import the module to be able to import (and execute) it again
              * We're currently relying on --experimental-loader (see `utils/node-loader.ts`) to support this.

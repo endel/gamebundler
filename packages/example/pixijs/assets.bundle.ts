@@ -29,7 +29,6 @@ export const spritesheet = await bundle.spritesheet([
 export const audio = await bundle.audiosprite([
   require('./assets/sound/*.ogg'),
 
-  // require('./assets/sound/switch1.ogg'),
   // require('./assets/sound/switch2.ogg'),
   // require('./assets/sound/switch3.ogg'),
 ]);

@@ -8,9 +8,9 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
 # TODO:
 
 - [x] Live-reload when `.bundle.ts` changed (must re-generate assets)
-- [ ] Generate manifest of each `.bundle`
+- [-] Generate manifest of each `.bundle`
   - [ ] Remove unused assets when a new one is generated.
-  - [ ] Cache mechanism to avoid re-generating assets without changes [devmode, optimization]
+  - [x] Cache mechanism to avoid re-generating assets without changes [devmode, optimization]
 - [ ] Integrate framework's loader system to allow end user to consume the asset [runtime, feature]
 - [ ] Support compressing textures using BASIS algorithm
 - [ ] Dynamically importing, loading, and using a `.bundle.ts`
