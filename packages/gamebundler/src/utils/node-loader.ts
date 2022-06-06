@@ -13,9 +13,9 @@ export const resolve = async (specifier: any, context: any, defaultResolve: any)
     return result;
   }
 
-  const workaroundNeedReload = (/\.bundle\.m?js$/.test(child.pathname));
+  const isAssetBundle = (/\.bundle\.m?js$/.test(child.pathname));
 
-  return (workaroundNeedReload)
+  return (isAssetBundle)
     ? { url: child.href + '?id=' + Math.random().toString(36).substring(3), }
     : { url: child.href, }
 }
