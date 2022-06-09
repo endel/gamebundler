@@ -31,6 +31,4 @@ export const audio = await bundle.audiosprite([
 
   // require('./assets/sound/switch2.ogg'),
   // require('./assets/sound/switch3.ogg'),
-], {
-  export: ['mp3','ac3','ogg','wav']
-});
+]);

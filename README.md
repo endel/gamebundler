@@ -11,7 +11,13 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
 - [-] Generate manifest of each `.bundle`
   - [ ] Remove unused assets when a new one is generated.
   - [x] Cache mechanism to avoid re-generating assets without changes [devmode, optimization]
-- [ ] Integrate framework's loader system to allow end user to consume the asset [runtime, feature]
+- [-] Integrate framework's loader system to allow end user to consume the asset [runtime, feature]
+  - [x] PIXI
+  - [ ] Phaser
+  - [ ] PlayCanvas
+  - [ ] Babylon.js
+  - [ ] THREE
+- [ ] Production mode (exclude .js/.css from dev)
 - [ ] Image optimizations
   - [ ] BASIS texture compression
   - [ ] lossless compression

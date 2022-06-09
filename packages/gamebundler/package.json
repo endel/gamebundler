@@ -5,7 +5,7 @@
   "type": "module",
   "types": "./dts/plugins.d.ts",
   "bin": {
-    "gamebundler": "./lib/bin.js"
+    "gamebundler": "./bin/cli.js"
   },
   "scripts": {
     "watch": "tsc -w",
