@@ -4,50 +4,38 @@ import bundle from "@gamebundler/comptime";
 import CANVAS from "canvas";
 import PSD from "psd";
 
-import psdfile from "./assets/assets.psd";
+// import psdfile from "./assets/assets.psd";
 
-const psd = PSD.fromFile(psdfile);
-psd.parse();
+// const sources = {};
+// const psd = PSD.fromFile(psdfile);
+// psd.parse();
+// psd.tree().descendants().forEach(node => {
+//   if (node.type === "layer") {
+//     let name = node.name;
+//     let parent = node.parent;
+//     while (parent) {
+//       name = `${parent.name}-${name}`;
+//       parent = node.parent;
 
-const files: any = {};
-psd.tree().descendants().forEach(node => {
-  if (node.type === "layer") {
-    let name = node.name;
-    let parent = node.parent;
-    while (parent) {
-      name = `${parent.name}-${name}`;
-      parent = node.parent;
+//       // skip "unused" layers
+//       if (
+//         name.indexOf("unused") >= 0 ||
+//         parent.isGroup() ||
+//         parent.isRoot()
+//       ) {
+//         break;
+//       }
+//     }
 
-      // skip "unused" layers
-      if (
-        name.indexOf("unused") >= 0 ||
-        parent.isGroup() ||
-        parent.isRoot()
-      ) {
-        break;
-      }
-    }
+//     const image = node.toPng();
 
-    const image = node.toPng();
+//     if (image.width > 0 && image.height > 0) {
+//       sources[name] = image;
+//     }
+//   }
+// });
 
-    if (image.width > 0 && image.height > 0) {
-      files[name] = image;
-    }
-  }
-});
-
-export const mazmorra = await bundle.spritesheet(files);
-
-// const canvas = CANVAS.createCanvas(100, 100);
-
-// const context = canvas.getContext("2d")
-// context.fillStyle = "red";
-// context.fillRect(5, 5, 90, 90);
-// context.fillStyle = "green";
-// context.fillRect(10, 10, 70, 70);
-
-// const filename = `${bundle.config.getCacheDir()}/generated.png`;
-// fs.writeFileSync(filename, canvas.toBuffer());
+// export const mazmorra = await bundle.spritesheet(sources);
 
 export const image = await bundle.image(require("./assets/emotes/heart.png"));
 

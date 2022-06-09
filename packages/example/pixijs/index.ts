@@ -32,12 +32,12 @@ const loader = PIXI.Loader.shared;
 console.log("IMAGE", bundle.image);
 
 loader.add("spritesheet", bundle.spritesheet.json);
-loader.add("mazmorra", bundle.mazmorra.json);
+// loader.add("mazmorra", bundle.mazmorra.json);
 loader.add("image", bundle.image);
 
 loader.load(() => {
-  const mazmorrasheet = loader.resources['mazmorra'];
-  console.log("mazmorra num textures:", mazmorrasheet, Object.keys(mazmorrasheet.textures).length);
+  // const mazmorrasheet = loader.resources['mazmorra'];
+  // console.log("mazmorra num textures:", mazmorrasheet, Object.keys(mazmorrasheet.textures).length);
 
   const sheet = loader.resources['spritesheet'];
   console.log("sheet:", sheet);
@@ -81,13 +81,13 @@ loader.load(() => {
   image.y = 15;
   container.addChild(image);
 
-  // ['bow-1', 'bow-2', 'bow-3', 'bow-4'].forEach((name, i) => {
-  ['hp-potion-1', 'hp-potion-2', 'hp-potion-3', 'hp-potion-4'].forEach((name, i) => {
-    const potion = new PIXI.Sprite(mazmorrasheet.textures[name]);
-    potion.x = 5 + (20 * i);
-    potion.y = 30;
-    container.addChild(potion);
-  });
+  // // ['bow-1', 'bow-2', 'bow-3', 'bow-4'].forEach((name, i) => {
+  // ['hp-potion-1', 'hp-potion-2', 'hp-potion-3', 'hp-potion-4'].forEach((name, i) => {
+  //   const potion = new PIXI.Sprite(mazmorrasheet.textures[name]);
+  //   potion.x = 5 + (20 * i);
+  //   potion.y = 30;
+  //   container.addChild(potion);
+  // });
 
   console.log("COMPLETE!")
 });

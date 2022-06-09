@@ -11,6 +11,7 @@ cli.option("--html <file>", "Use specified HTML file", { default: path.resolve(t
 cli.option("--out <directory>", "Output directory", { default: path.resolve("public") });
 cli.option("--cache-dir <directory>", "Local cache directory", { default: path.resolve(".cache") });
 cli.option("--tsconfig <custom-tsconfig.json>", "tsconfig.json file path.", { default: path.resolve(templatePath, "tsconfig.json") });
+cli.option("--package-json <path/to/package.json>", "package.json file path.", { default: path.resolve('package.json') });
 
 cli.version('1.0.0');
 cli.help();
@@ -27,6 +28,7 @@ if (cli.options.help || cli.options.version) {
 // resolve and set paths
 config.setOutputDirectory(path.resolve(parsed.options.out));
 config.setCacheDir(path.resolve(parsed.options.cacheDir));
+config.setPackageJSON(parsed.options.packageJson);
 
 // ensure "assets" directory exists
 if (!fs.existsSync(config.getOutputDirectory())) { fs.mkdirSync(config.getOutputDirectory()); }

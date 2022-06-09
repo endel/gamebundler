@@ -1,9 +1,11 @@
+import fs from "fs";
 import path from "path";
 
 let sourceDirectory: string;
 let outputDirectory: string;
 let assetsDirectory: string;
 let cacheDirectory: string;
+let packageJSON: any = {};
 
 export function setSourceDirectory(dir: string) { sourceDirectory = dir; }
 export function getSourceDirectory() { return sourceDirectory; }
@@ -18,3 +20,12 @@ export function getAssetsDirectory() {
 
 export function setCacheDir(dir: string) { cacheDirectory = dir; }
 export function getCacheDir() { return cacheDirectory; }
+
+export function setPackageJSON(path: string) {
+  try {
+    packageJSON = JSON.parse(fs.readFileSync(path, "utf8").toString());
+  } catch (e) {
+    console.error(e);
+  }
+}
+export function getPackageJSON() { return packageJSON; }

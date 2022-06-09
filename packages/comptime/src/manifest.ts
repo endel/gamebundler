@@ -21,7 +21,15 @@ export class Manifest {
 
   // TODO: invalidate cache
 
-  async cache<T>(files: Array<string | Buffer>, options: any, callback: () => Promise<T>): Promise<T> {
+  async cache<T>(files: Array<string | Buffer>, callback: () => Promise<T>): Promise<T>
+  async cache<T>(files: Array<string | Buffer>, options: any, callback: () => Promise<T>): Promise<T>
+  async cache<T>(files: Array<string | Buffer>, optionsOrCallback: any, callback?: () => Promise<T>): Promise<T> {
+    if (typeof optionsOrCallback === "function" && typeof(callback) === "undefined") {
+      // only 2 arguments provided...
+      callback = optionsOrCallback;
+      optionsOrCallback = {};
+    }
+
     const fingerprints = await Promise.all(files.map(async (file) => {
       if (typeof file === "string") {
         const stat = await fs.promises.stat(file);
@@ -32,7 +40,7 @@ export class Manifest {
       }
     }));
 
-    const fingerprint = getFingerprint(fingerprints.join(',') + JSON.stringify(options));
+    const fingerprint = getFingerprint(fingerprints.join(',') + JSON.stringify(optionsOrCallback));
 
     let result: Promise<T> | T;
 

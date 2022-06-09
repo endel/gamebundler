@@ -5,8 +5,6 @@ import esbuild from '@netlify/esbuild';
 import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
 import * as manifest from "@gamebundler/comptime/lib/manifest.js";
 
-import { isDevelopment } from "../dev.js";
-
 import { fileLoaderPlugin } from './file-loader.js';
 import { wildcardFileLoaderPlugin } from './wildcard-file-loader.js';
 import { rawLoaderPlugin } from './raw-loader.js';
@@ -28,8 +26,12 @@ function buildBundleSources(entrypoint: string) {
     sourcemap: false,
     write: false,
     bundle: true,
-    // TODO: list modules from package.json as "external"
-    external: ["@gamebundler/comptime", "canvas", "psd"],
+    external: [
+      "@gamebundler/comptime",
+      "canvas", "psd", "fast-glob", // common/internal packages
+      ...Object.keys(config.getPackageJSON()?.dependencies || {}),
+      ...Object.keys(config.getPackageJSON()?.devDependencies || {}),
+    ],
     // assetNames:
     plugins: [
       nativeNodeModulesPlugin,
@@ -91,8 +93,6 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
         } else {
           contents += `export const ${key} = `;
         }
-
-        // console.log(`export ${key} =>`, exports[key]);
 
         contents += JSON.stringify(exports[key]) + ";\n";
       }
