@@ -1,11 +1,27 @@
 import path from "path";
 import generateAudioSprite, { AudioSpriteOptions, AudioSpriteOutput } from "@gamestdio/audiosprite";
 
-import { FilePath, evaluateFilePaths, getFingerprint } from "./file";
+import { FilePath, evaluateFilePath, evaluateFilePaths, getFingerprint } from "./file";
 import { getAssetsDirectory, getOutputDirectory, } from "./config";
-import { getCurrentManifest } from "./manifest";
+import { manifest } from "./manifest";
 
-type AudioSpriteReturnType = AudioSpriteOutput['default'] & {type: "audiosprite"};
+export type AudioSpriteReturnType = AudioSpriteOutput['default'] & { type: "audiosprite" };
+export type AudioReturnType = {
+  type: "audio",
+  formats: string[],
+}
+
+export async function audio(input: FilePath, options: any): Promise<AudioReturnType> {
+  const file = evaluateFilePath(input) as string;
+  return await manifest.cache([file], options, async () => {
+    const { resources } = await generateAudioSprite([file], { format: "default" });
+
+    return {
+      type: "audio",
+      formats: resources
+    };
+  });
+}
 
 export async function audiosprite(
   paths: FilePath[],
@@ -16,7 +32,7 @@ export async function audiosprite(
   options.output = path.resolve(getAssetsDirectory(), getFingerprint(files.join(",")));
   options.path = getAssetsDirectory();
 
-  return await getCurrentManifest().cache(files, options, async () => {
+  return await manifest.cache(files, options, async () => {
     const result = await generateAudioSprite(files, {
       ...options,
       format: "default"

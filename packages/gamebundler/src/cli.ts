@@ -22,10 +22,10 @@ const onBuildSuccessful = () => console.log(`${String.fromCodePoint(0x2705)} Bui
 
 esbuild
   .build({
-    // format: "iife", // FIXME: only required for TLA (top-level await)
     entryPoints: cli.args,
     // tsconfig: parsed.options.tsconfig,
     platform: "browser",
+    format: "esm",
     outfile: path.resolve(cli.options.out, "bundle.js"),
     // outdir: path.resolve(cli.options.out),
     absWorkingDir: process.cwd(),

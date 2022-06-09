@@ -12,11 +12,14 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
   - [ ] Remove unused assets when a new one is generated.
   - [x] Cache mechanism to avoid re-generating assets without changes [devmode, optimization]
 - [ ] Integrate framework's loader system to allow end user to consume the asset [runtime, feature]
-- [ ] Support compressing textures using BASIS algorithm
+- [ ] Image optimizations
+  - [ ] BASIS texture compression
+  - [ ] lossless compression
+  - [ ] lossy (many levels)
+- [ ] Support multiple image scale ratios (e.g. 0.5x, 2x, 3x, etc.)
 - [ ] Dynamically importing, loading, and using a `.bundle.ts`
 - [ ] Dynamically importing and executing code as "game levels"
 - [ ] Component-driven / Storybook / "Playground" (Single-component "Playground")
-- [ ] Support multiple image scale ratios (e.g. 0.5x, 2x, 3x, etc.)
 
 **Import types**
 

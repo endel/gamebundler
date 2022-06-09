@@ -6,6 +6,16 @@ import { manifest } from "./manifest";
 import { getSourceDirectory } from "./config";
 import { FilePath, evaluateFilePath, evaluateFilePaths, outputFile } from "./file";
 
+export type SpriteSheetReturnType = {
+  type: "spritesheet",
+  image: string,
+  json: string,
+}
+export type ImageReturnType = {
+  type: "image",
+  image: string,
+}
+
 type ImageOptimization = "lossless" | "lossy-high" | "lossy-low" // PngQuant, Zopfli, BASIS
 
 export type OutputFormat = "png" | "jpeg";
@@ -16,10 +26,13 @@ export async function image(
     format?: OutputFormat,
     optimization?: ImageOptimization,
   }
-) {
+): Promise<ImageReturnType> {
   const filepath = evaluateFilePath(path) as string;
   return await manifest.cache([filepath], options, async () => {
-    return outputFile("png", await fs.promises.readFile(filepath));
+    return {
+      type: "image",
+      image: outputFile("png", await fs.promises.readFile(filepath)) as unknown as string
+    };
   });
 }
 
@@ -32,7 +45,7 @@ export async function spritesheet(
     crop?: boolean;
     scale?: number;
   } = {}
-) {
+): Promise<SpriteSheetReturnType> {
   // Force PNG for now
   options.outputFormat = "png";
 
@@ -52,7 +65,7 @@ export async function spritesheet(
 
     return {
       type: "spritesheet",
-      image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`),
+      image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`) as unknown as string,
       json: outputFile("json", JSON.stringify(result.json)) as unknown as string,
     };
   });

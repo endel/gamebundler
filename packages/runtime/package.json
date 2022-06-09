@@ -1,8 +1,9 @@
 {
   "name": "@gamebundler/runtime",
   "version": "1.0.0",
-  "description": "Minimal runtime required for @gamestd/bundler",
+  "description": "Minimal runtime required for gamebundler",
   "main": "lib/index.js",
+  "module": "src/index.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -13,5 +14,32 @@
     "bundler"
   ],
   "author": "Endel Dreyer",
-  "license": "MIT"
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      }
+    },
+    "./lib/pixi": {
+      "import": {
+        "types": "./lib/pixi.d.ts",
+        "default": "./lib/pixi.js"
+      },
+      "require": {
+        "types": "./lib/pixi.d.ts",
+        "default": "./lib/pixi.js"
+      }
+    }
+  },
+  "devDependencies": {
+    "@gamebundler/comptime": "^1.0.0",
+    "@pixi/loaders": "^6.4.2",
+    "@pixi/sound": "^4.2.0"
+  }
 }

@@ -1,16 +1,10 @@
 import * as PIXI from "pixi.js";
-import * as Sound from "@pixi/sound";
+import "@pixi/sound";
+
 import { canvas } from "@gamebundler/runtime";
+import { loadBundle } from "@gamebundler/runtime/lib/pixi";
 
-// import { spritesheet, audio } from "./assets.bundle";
 import * as bundle from "./assets.bundle";
-
-(window as any).PIXI = PIXI;
-
-const sounds = Sound.Sound.from({
-  url: bundle.audio.resources[0],
-  sprites: bundle.audio.spritemap
-});
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 PIXI.settings.ROUND_PIXELS = true;
@@ -27,19 +21,13 @@ const container = new PIXI.Container();
 container.scale.set(10);
 app.stage.addChild(container);
 
-const loader = PIXI.Loader.shared;
+console.log("Loading...");
+loadBundle(bundle).then((resource) => {
+  console.log('RES:', resource);
+  const sheet = resource.spritesheet
 
-console.log("IMAGE", bundle.image);
+  const sound = resource.audio.sound;
 
-loader.add("spritesheet", bundle.spritesheet.json);
-// loader.add("mazmorra", bundle.mazmorra.json);
-loader.add("image", bundle.image);
-
-loader.load(() => {
-  // const mazmorrasheet = loader.resources['mazmorra'];
-  // console.log("mazmorra num textures:", mazmorrasheet, Object.keys(mazmorrasheet.textures).length);
-
-  const sheet = loader.resources['spritesheet'];
   console.log("sheet:", sheet);
   console.log("textures:", sheet.textures);
   console.log("num textures:", Object.keys(sheet.textures).length);
@@ -63,7 +51,7 @@ loader.load(() => {
     // number from 1 to 3
     const soundNum = Math.floor(Math.random() * 3) + 1;
     console.log("CLICKED", { soundNum });
-    sounds.play(`switch${soundNum}`);
+    sound.play(`switch${soundNum}`);
   });
 
   const left = new PIXI.AnimatedSprite([
@@ -76,20 +64,13 @@ loader.load(() => {
   left.play();
   container.addChild(left);
 
-  const image = PIXI.Sprite.from("image");
+  const image = PIXI.Sprite.from(resource.image.texture);
   image.x = 15;
   image.y = 15;
   container.addChild(image);
 
-  // // ['bow-1', 'bow-2', 'bow-3', 'bow-4'].forEach((name, i) => {
-  // ['hp-potion-1', 'hp-potion-2', 'hp-potion-3', 'hp-potion-4'].forEach((name, i) => {
-  //   const potion = new PIXI.Sprite(mazmorrasheet.textures[name]);
-  //   potion.x = 5 + (20 * i);
-  //   potion.y = 30;
-  //   container.addChild(potion);
-  // });
-
   console.log("COMPLETE!")
+
 });
 
 // listen for window resize events
