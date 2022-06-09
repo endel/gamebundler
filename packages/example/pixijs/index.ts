@@ -7,16 +7,10 @@ import * as bundle from "./assets.bundle";
 
 (window as any).PIXI = PIXI;
 
-console.log("RAW AUDIOSPRITE:", bundle.audio);
-// console.log("RAW SPRITESHEET:", spritesheet);
-
-console.log("WHERE'S MY SOUND??");
 const sounds = Sound.Sound.from({
   url: bundle.audio.resources[0],
   sprites: bundle.audio.spritemap
 });
-
-console.log("SOUNDS", sounds);
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 PIXI.settings.ROUND_PIXELS = true;
@@ -38,9 +32,13 @@ const loader = PIXI.Loader.shared;
 console.log("IMAGE", bundle.image);
 
 loader.add("spritesheet", bundle.spritesheet.json);
+loader.add("mazmorra", bundle.mazmorra.json);
 loader.add("image", bundle.image);
 
 loader.load(() => {
+  const mazmorrasheet = loader.resources['mazmorra'];
+  console.log("mazmorra num textures:", mazmorrasheet, Object.keys(mazmorrasheet.textures).length);
+
   const sheet = loader.resources['spritesheet'];
   console.log("sheet:", sheet);
   console.log("textures:", sheet.textures);
@@ -82,6 +80,14 @@ loader.load(() => {
   image.x = 15;
   image.y = 15;
   container.addChild(image);
+
+  // ['bow-1', 'bow-2', 'bow-3', 'bow-4'].forEach((name, i) => {
+  ['hp-potion-1', 'hp-potion-2', 'hp-potion-3', 'hp-potion-4'].forEach((name, i) => {
+    const potion = new PIXI.Sprite(mazmorrasheet.textures[name]);
+    potion.x = 5 + (20 * i);
+    potion.y = 30;
+    container.addChild(potion);
+  });
 
   console.log("COMPLETE!")
 });

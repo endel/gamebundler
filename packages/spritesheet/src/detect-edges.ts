@@ -3,7 +3,7 @@
  * https://github.com/GMartigny/detect-edges/
  */
 
-// import { Canvas } from "canvas";
+import Canvas from "canvas";
 
 const checkOpacityLevel = tolerance => (pixels) => {
   let transparent = true;
@@ -16,7 +16,7 @@ const checkOpacityLevel = tolerance => (pixels) => {
 const defaultOptions = { tolerance: 0, };
 
 export default (
-  canvas: any,
+  canvas: Canvas.Canvas,
   options?: {
     top: number,
     left: number,
@@ -33,6 +33,7 @@ export default (
 
   const context = canvas.getContext("2d");
   const { width, height } = canvas;
+
   let pixels;
 
   let top = -1;

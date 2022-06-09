@@ -2,18 +2,18 @@ import fs from "fs";
 import { getFingerprint } from "./file";
 
 const manifests: { [key: string]: Manifest } = {};
-let currentManifest: Manifest;
+export let manifest: Manifest;
 
 export function initialize(path: string) {
   if (!manifests[path]) {
     manifests[path] = new Manifest();
   }
 
-  currentManifest = manifests[path];
+  manifest = manifests[path];
 }
 
 export function getCurrentManifest() {
-  return currentManifest;
+  return manifest;
 }
 
 export class Manifest {
@@ -21,10 +21,15 @@ export class Manifest {
 
   // TODO: invalidate cache
 
-  async cache<T>(files: string[], options: any, callback: () => Promise<T>): Promise<T> {
-    const fingerprints = await Promise.all(files.map(async (filepath) => {
-      const stat = await fs.promises.stat(filepath);
-      return `${filepath}${stat.mtimeMs}${stat.size}`;
+  async cache<T>(files: Array<string | Buffer>, options: any, callback: () => Promise<T>): Promise<T> {
+    const fingerprints = await Promise.all(files.map(async (file) => {
+      if (typeof file === "string") {
+        const stat = await fs.promises.stat(file);
+        return `${file}${stat.mtimeMs}${stat.size}`;
+
+      } else {
+        return `${file.byteLength}`;
+      }
     }));
 
     const fingerprint = getFingerprint(fingerprints.join(',') + JSON.stringify(options));

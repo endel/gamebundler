@@ -11,7 +11,19 @@ export function isPartOfBundle(build: esbuild.PluginBuild) {
   );
 }
 
-export const FILE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'svg', 'xml', 'webp', 'aiff', 'wav', 'ac3', 'mp3', 'mp4', 'm4a', 'ogg', 'opus', 'webm'];
+export const FILE_EXTENSIONS = [
+  // image
+  'png', 'jpg', 'jpeg', 'svg', 'webp',
+
+  // misc
+  'xml',
+
+  // audio
+  'aiff', 'wav', 'ac3', 'mp3', 'mp4', 'm4a', 'ogg', 'opus', 'webm',
+
+  // adobe
+  'psd',
+];
 
 /**
  * File Loader Plugin

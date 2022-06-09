@@ -8,8 +8,6 @@ export type FilePath =
   | Array<{ default: string }> // import + wildcard
   | { default: Array<{ default: string }> } // require + wildcard
 
-export type AllowedFilePaths = Array<FilePath>;
-
 export function evaluateFilePath(file: FilePath) {
   if (typeof (file) === "string") {
     return file;
@@ -22,10 +20,14 @@ export function evaluateFilePath(file: FilePath) {
 
   } else if (typeof (file.default) === "string") {
     return file.default;
+
+  } else {
+    // FIXME: buffer/streams are hitting here
+    return file;
   }
 }
 
-export function evaluateFilePaths(paths: AllowedFilePaths | FilePath) {
+export function evaluateFilePaths(paths: FilePath[] | FilePath) {
   if (!Array.isArray(paths)) {
     return evaluateFilePaths([paths])
   }

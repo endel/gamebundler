@@ -1,6 +1,7 @@
 import fsPromises from 'fs/promises';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
+
 import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
 import * as manifest from "@gamebundler/comptime/lib/manifest.js";
 
@@ -9,6 +10,7 @@ import { isDevelopment } from "../dev.js";
 import { fileLoaderPlugin } from './file-loader.js';
 import { wildcardFileLoaderPlugin } from './wildcard-file-loader.js';
 import { rawLoaderPlugin } from './raw-loader.js';
+import { nativeNodeModulesPlugin } from './native-node-module-loader.js';
 
 //
 // possibly relevant: `build.onResolve()`
@@ -21,14 +23,19 @@ function buildBundleSources(entrypoint: string) {
   return esbuild.build({
     entryPoints: [entrypoint],
     format: "esm",
-    platform: "browser",
+    // platform: "browser",
+    platform: "node",
     sourcemap: false,
     write: false,
     bundle: true,
-    external: ["@gamebundler/comptime"],
+    // TODO: list modules from package.json as "external"
+    external: ["@gamebundler/comptime", "canvas", "psd"],
     // assetNames:
-    plugins: [wildcardFileLoaderPlugin, fileLoaderPlugin, rawLoaderPlugin], // ,
-    minify: !isDevelopment,
+    plugins: [
+      nativeNodeModulesPlugin,
+      wildcardFileLoaderPlugin, fileLoaderPlugin, rawLoaderPlugin,
+    ],
+    minify: false,
     outdir: config.getCacheDir(),
   });
 }

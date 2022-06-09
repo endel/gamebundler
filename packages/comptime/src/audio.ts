@@ -1,14 +1,14 @@
 import path from "path";
 import generateAudioSprite, { AudioSpriteOptions, AudioSpriteOutput } from "@gamestdio/audiosprite";
 
-import { AllowedFilePaths, evaluateFilePaths, getFingerprint } from "./file";
+import { FilePath, evaluateFilePaths, getFingerprint } from "./file";
 import { getAssetsDirectory, getOutputDirectory, } from "./config";
 import { getCurrentManifest } from "./manifest";
 
 type AudioSpriteReturnType = AudioSpriteOutput['default'] & {type: "audiosprite"};
 
 export async function audiosprite(
-  paths: AllowedFilePaths,
+  paths: FilePath[],
   options: AudioSpriteOptions<'default'> = {}
 ): Promise<AudioSpriteReturnType> {
   const files = evaluateFilePaths(paths);

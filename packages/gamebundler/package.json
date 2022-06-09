@@ -17,6 +17,7 @@
     "@netlify/esbuild": "^0.14.25",
     "@pencil.js/spritesheet": "^1.5.1",
     "cac": "^6.7.12",
+    "esbuild-coffeescript": "^2.0.0",
     "fast-glob": "^3.2.11",
     "http-server": "^14.1.0",
     "open": "^8.4.0",

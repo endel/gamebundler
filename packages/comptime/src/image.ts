@@ -2,9 +2,9 @@ import fs from "fs";
 import path from "path";
 import generateSpritesheet from "@gamebundler/spritesheet";
 
-import { getCurrentManifest } from "./manifest";
+import { manifest } from "./manifest";
 import { getSourceDirectory } from "./config";
-import { AllowedFilePaths, evaluateFilePath, evaluateFilePaths, outputFile } from "./file";
+import { FilePath, evaluateFilePath, evaluateFilePaths, outputFile } from "./file";
 
 type ImageOptimization = "lossless" | "lossy-high" | "lossy-low" // PngQuant, Zopfli, BASIS
 
@@ -18,13 +18,13 @@ export async function image(
   }
 ) {
   const filepath = evaluateFilePath(path) as string;
-  return await getCurrentManifest().cache([filepath], options, async () => {
+  return await manifest.cache([filepath], options, async () => {
     return outputFile("png", await fs.promises.readFile(filepath));
   });
 }
 
 export async function spritesheet(
-  paths: AllowedFilePaths,
+  images: FilePath[] | {[frameName: string]: FilePath},
   options: {
     outputFormat?: OutputFormat,
     optimize?: ImageOptimization,
@@ -36,10 +36,16 @@ export async function spritesheet(
   // Force PNG for now
   options.outputFormat = "png";
 
+  const isKeyValue = !Array.isArray(images);
+
+  const paths = (isKeyValue)
+    ? Object.values(images)
+    : images;
+
   const files = evaluateFilePaths(paths);
 
-  return await getCurrentManifest().cache(files, options, async () => {
-    const result = await generateSpritesheet(files, {
+  return await manifest.cache(files, options, async () => {
+    const result = await generateSpritesheet(isKeyValue ? images : files, {
       ...options,
       baseUrl: `${getSourceDirectory()}${path.sep}`,
     });
