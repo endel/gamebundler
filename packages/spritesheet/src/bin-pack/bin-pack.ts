@@ -9,11 +9,13 @@
 import GrowingPacker from "./packer.growing";
 
 export type Item = {
-  x: number;
-  y: number;
-  item: any;
+  item?: any;
   width: number;
   height: number;
+
+  // populated by packer
+  x?: number;
+  y?: number;
 }
 
 export type PackedItems = {
@@ -30,7 +32,7 @@ export default function (
 	const inPlace = options.inPlace || false;
 
 	// Clone the items.
-	let newItems = items.map(function(item) {
+	let newItems: Item[] = items.map(function(item) {
     return (inPlace)
       ? item
       : { width: item.width, height: item.height, item: item };
