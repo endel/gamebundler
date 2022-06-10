@@ -17,8 +17,8 @@
     "@netlify/esbuild": "^0.14.25",
     "@pencil.js/spritesheet": "^1.5.1",
     "cac": "^6.7.12",
-    "esbuild-coffeescript": "^2.0.0",
     "fast-glob": "^3.2.11",
+    "html-minifier": "^4.0.0",
     "http-server": "^14.1.0",
     "open": "^8.4.0",
     "ts-node": "^10.7.0",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@gamebundler/comptime": "^1.0.0",
     "@gamebundler/runtime": "^1.0.0",
+    "@types/html-minifier": "^4.0.2",
     "@types/http-server": "^0.12.1",
     "@types/ws": "^8.5.3"
   }

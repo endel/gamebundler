@@ -5,12 +5,16 @@ import httpServer from 'http-server';
 import * as ws from "ws";
 
 import events from 'events';
+import { config } from "@gamebundler/comptime";
 
 import cli from './cli-parsed.js';
 import { templatePath } from './paths.js';
+import { injectHTML } from './html/processing.js';
 
 export const devEvents = new events.EventEmitter();
-export const isDevelopment = (process.env.NODE_ENV !== "production");
+export const isDevelopment = !config.isReleaseMode();
+
+
 
 export const devServer = isDevelopment && httpServer.createServer({
   root: cli.options.out,
@@ -36,7 +40,15 @@ export const devServer = isDevelopment && httpServer.createServer({
       // serve static HTML file
       res.setHeader("Content-Type", "text/html");
       res.setHeader("Cache-Control", "no-cache");
-      res.write(fs.readFileSync(cli.options.html));
+
+      const htmlContents = fs.readFileSync(cli.options.html).toString();
+      const devHTML = injectHTML(htmlContents, [
+        '<script src="bundle.js"></script>',
+        '<script src="/gamebundler/development.js"></script>',
+        '<link rel="stylesheet" href="/gamebundler/development.css" />'
+      ].join("\n"));
+      res.write(devHTML);
+
       res.end();
       return;
 

@@ -6,6 +6,7 @@ let outputDirectory: string;
 let assetsDirectory: string;
 let cacheDirectory: string;
 let packageJSON: any = {};
+let releaseMode: boolean;
 
 export function setSourceDirectory(dir: string) { sourceDirectory = dir; }
 export function getSourceDirectory() { return sourceDirectory; }
@@ -29,3 +30,6 @@ export function setPackageJSON(path: string) {
   }
 }
 export function getPackageJSON() { return packageJSON; }
+
+export function setReleaseMode(bool: boolean) { releaseMode = bool; }
+export function isReleaseMode() { return releaseMode; }

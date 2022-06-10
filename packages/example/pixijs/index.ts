@@ -24,7 +24,7 @@ app.stage.addChild(container);
 console.log("Loading...");
 loadBundle(bundle).then((resource) => {
   console.log('RES:', resource);
-  const sheet = resource.spritesheet
+  const sheet = resource.spritesheet;
 
   const sound = resource.audio.sound;
 

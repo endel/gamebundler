@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import open from 'open';
@@ -10,6 +11,8 @@ import { rawLoaderPlugin } from './plugins/raw-loader.js';
 
 import cli from './cli-parsed.js';
 import { devEvents, isDevelopment, devServer } from './dev.js';
+import { config } from '@gamebundler/comptime';
+import { injectHTML, minifyHTML } from './html/processing.js';
 
 //
 // TODO?
@@ -17,12 +20,16 @@ import { devEvents, isDevelopment, devServer } from './dev.js';
 //
 
 // TODO: support importing CSS
+const entrypoint = (cli.args.length > 0)
+  ? cli.args
+  : [config.getPackageJSON().main];
 
 const onBuildSuccessful = () => console.log(`${String.fromCodePoint(0x2705)} Build successful!`);
 
 esbuild
   .build({
-    entryPoints: cli.args,
+    entryPoints: entrypoint,
+
     // tsconfig: parsed.options.tsconfig,
     platform: "browser",
     format: "esm",
@@ -31,11 +38,19 @@ esbuild
     absWorkingDir: process.cwd(),
     bundle: true,
     minify: !isDevelopment,
-    sourcemap: true,
+    sourcemap: isDevelopment,
+    legalComments: (isDevelopment)
+      ? "eof"
+      : "external",
     banner: {
       js: "// built with gamebundler\n// https://github.com/endel/gamebundler",
       css: "/* built with gamebundler */\n/* https://github.com/endel/gamebundler */",
     },
+
+    // loader: {
+    //   '.svg': 'text',
+    // },
+
     plugins: [
       bundleLoaderPlugin,
       wildcardFileLoaderPlugin,
@@ -59,13 +74,24 @@ esbuild
     },
   })
 
-  .then((r) => {
+  .then(async (r) => {
     const port = process.env.PORT || 8000;
 
     devServer?.listen(port, () => {
       console.log(`Serving at http://localhost:${port}`);
       open(`http://localhost:${port}`);
     });
+
+    if (config.isReleaseMode()) {
+      // copy html template to output directory
+      const htmlTemplate = cli.options.html;
+      if (fs.existsSync(htmlTemplate)) {
+        const minifiedHTML = minifyHTML(await fs.promises.readFile(htmlTemplate, 'utf8')).toString();
+        console.log("minifiedHTML:", minifiedHTML);
+        const finalHTML = injectHTML(minifiedHTML, '<script src="bundle.js"></script>');
+        await fs.promises.writeFile(path.resolve(cli.options.out, "index.html"), finalHTML);
+      }
+    }
 
     onBuildSuccessful();
   })

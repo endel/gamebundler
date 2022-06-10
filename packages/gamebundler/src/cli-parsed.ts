@@ -1,5 +1,5 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import cac from 'cac';
 import { config } from "@gamebundler/comptime";
 
@@ -12,6 +12,7 @@ cli.option("--out <directory>", "Output directory", { default: path.resolve("pub
 cli.option("--cache-dir <directory>", "Local cache directory", { default: path.resolve(".cache") });
 cli.option("--tsconfig <custom-tsconfig.json>", "tsconfig.json file path.", { default: path.resolve(templatePath, "tsconfig.json") });
 cli.option("--package-json <path/to/package.json>", "package.json file path.", { default: path.resolve('package.json') });
+cli.option("--release", "Build for release / production", { default: false });
 
 cli.version('1.0.0');
 cli.help();
@@ -21,14 +22,13 @@ cli.help();
 
 const parsed: any = cli.parse();
 
-if (cli.options.help || cli.options.version) {
-  process.exit();
-}
+if (cli.options.help || cli.options.version) { process.exit(); }
 
 // resolve and set paths
 config.setOutputDirectory(path.resolve(parsed.options.out));
 config.setCacheDir(path.resolve(parsed.options.cacheDir));
 config.setPackageJSON(parsed.options.packageJson);
+config.setReleaseMode(parsed.options.release);
 
 // ensure "assets" directory exists
 if (!fs.existsSync(config.getOutputDirectory())) { fs.mkdirSync(config.getOutputDirectory()); }
@@ -37,24 +37,5 @@ if (!fs.existsSync(config.getCacheDir())) { fs.mkdirSync(config.getCacheDir()); 
 
 // build id
 parsed.id = Math.floor(Math.random() * 1);
-
-// // create output directory
-// let needCreateDir = false;
-// try {
-//   const outStat = fs.lstatSync(parsed.options.out);
-//   if (!outStat.isDirectory()) {
-//     needCreateDir = true;
-//   }
-// } catch (e: any) {
-//   if (e.code === "ENOENT") {
-//     needCreateDir = true;
-//   } else {
-//     throw e;
-//   }
-// }
-// if (needCreateDir) {
-//   console.warn("Creating output directory:", parsed.options.out);
-//   fs.mkdirSync(parsed.options.out);
-// }
 
 export default parsed;

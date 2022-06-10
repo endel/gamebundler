@@ -3,7 +3,7 @@
 A modern build tool for crafting HTML5 games. Features compile-time asset building and industry standards asset optimization. Built on top of [`esbuild`](https://esbuild.github.io/).
 
 > **Warning**
-> This is an experimental piece of software that may change its API's at any point. **Use at your own risk.**
+> This is an experimental.  **Use at your own risk.**
 
 # TODO:
 
@@ -18,6 +18,8 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
   - [ ] Babylon.js
   - [ ] THREE
 - [ ] Production mode (exclude .js/.css from dev)
+  - [ ] Minify assets
+  - [ ] Output file size stats
 - [ ] Image optimizations
   - [ ] BASIS texture compression
   - [ ] lossless compression

@@ -18,3 +18,8 @@ const child = spawn(execPath, [
 // forward stdout and stderr to the current process
 child.stdout.on('data', data => process.stdout.write(data));
 child.stderr.on('data', data => process.stderr.write(data));
+child.on("exit", () => process.exit());
+
+['SIGINT', 'SIGTERM'].forEach(signal => {
+  process.on(signal, () => child.kill(signal));
+});

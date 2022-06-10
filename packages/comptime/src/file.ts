@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs/promises";
 import crypto from "crypto";
+import * as config from "./config";
 
 export type FilePath =
   string
@@ -54,6 +55,9 @@ export class File {
   }
 
   async write(outputDir: string) {
+    if (config.isReleaseMode()) {
+      // TODO: compress the file
+    }
     await fs.writeFile(path.resolve(outputDir, this.filename), this.contents);
   }
 
