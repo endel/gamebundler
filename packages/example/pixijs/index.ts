@@ -21,21 +21,19 @@ const container = new PIXI.Container();
 container.scale.set(10);
 app.stage.addChild(container);
 
-console.log("Loading...");
-loadBundle(bundle).then((resource) => {
-  console.log('RES:', resource);
-  const sheet = resource.spritesheet;
+loadBundle(bundle).then((res) => {
+  console.log('RES:', res);
+  const sheetTextures = res.spritesheet.textures!;
+  const sound = res.audio;
 
-  const sound = resource.audio.sound;
-
-  console.log("sheet:", sheet);
-  console.log("textures:", sheet.textures);
-  console.log("num textures:", Object.keys(sheet.textures).length);
+  console.log("sheet:", sheetTextures);
+  console.log("textures:", sheetTextures.textures);
+  console.log("num textures:", Object.keys(sheetTextures).length);
 
   const bottom = new PIXI.AnimatedSprite([
-    sheet.textures['assets/ball/bottom-0.png'],
-    sheet.textures['assets/ball/bottom-1.png'],
-    sheet.textures['assets/ball/bottom-2.png'],
+    sheetTextures['assets/ball/bottom-0.png'],
+    sheetTextures['assets/ball/bottom-1.png'],
+    sheetTextures['assets/ball/bottom-2.png'],
   ]);
   bottom.animationSpeed = 0.2;
   bottom.play();
@@ -55,16 +53,16 @@ loadBundle(bundle).then((resource) => {
   });
 
   const left = new PIXI.AnimatedSprite([
-    sheet.textures['assets/ball/left-0.png'],
-    sheet.textures['assets/ball/left-1.png'],
-    sheet.textures['assets/ball/left-2.png'],
+    sheetTextures['assets/ball/left-0.png'],
+    sheetTextures['assets/ball/left-1.png'],
+    sheetTextures['assets/ball/left-2.png'],
   ]);
   left.x = 30;
   left.animationSpeed = 0.2;
   left.play();
   container.addChild(left);
 
-  const image = PIXI.Sprite.from(resource.image.texture);
+  const image = PIXI.Sprite.from(res.image.texture!);
   image.x = 15;
   image.y = 15;
   container.addChild(image);

@@ -1,11 +1,22 @@
-import "@pixi/sound"; // register sound loader
+import Sound from "@pixi/sound"; // register sound loader
 import { Loader, LoaderResource } from "@pixi/loaders";
 import type { ImageReturnType, SpriteSheetReturnType, AudioReturnType, AudioSpriteReturnType } from "@gamebundler/comptime";
 
 type AssetType = SpriteSheetReturnType | ImageReturnType | AudioReturnType | AudioSpriteReturnType;
 
-export async function loadBundle<T extends { [key in keyof T]: AssetType }>(bundle: T): Promise<{ [key in keyof T]: LoaderResource }> {
-  const result: { [key in keyof T]?: LoaderResource } = {};
+type MapAssetType<T> = T extends SpriteSheetReturnType
+  ? LoaderResource
+  : T extends ImageReturnType
+    ? LoaderResource
+    : T extends AudioReturnType
+      ? Sound.Sound
+      : T extends AudioSpriteReturnType
+        ? Sound.Sound
+        : never;
+
+// export async function loadBundle<V extends AssetType, T extends { [key in keyof T]: V }>(bundle: T): Promise<{ [key in keyof T]: ValueOf<T>['type'] }> {
+export async function loadBundle<V extends AssetType, T extends { [key in keyof T]: V }>(bundle: T): Promise< { [key in keyof T]: MapAssetType<T[key]> } > {
+  const result: { [key in keyof T]?: MapAssetType<T[key]> } = {};
 
   const loader = new Loader();
   for (const name in bundle) {
@@ -35,23 +46,25 @@ export async function loadBundle<T extends { [key in keyof T]: AssetType }>(bund
       for (const name in bundle) {
         const asset = bundle[name];
         switch (asset.type) {
-          // case "spritesheet":
-          //   break;
-
-          // case "image":
-          //   break;
-
-          case "audiosprite":
-            loader.resources[name].sound.addSprites(asset.spritemap);
-            console.log(asset.spritemap);
+          case "spritesheet":
+          case "image":
+            // @ts-ignore
             result[name] = loader.resources[name];
             break;
 
-          // case "audio":
-          //   break;
+          case "audiosprite":
+            const sound = loader.resources[name].sound;
+            sound.addSprites(asset.spritemap);
+            // @ts-ignore
+            result[name] = sound;
+            break;
+
+          case "audio":
+            // @ts-ignore
+            result[name] = loader.resources[name].sound;
+            break;
         }
 
-        result[name] = loader.resources[name];
       }
 
       // @ts-ignore

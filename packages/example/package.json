@@ -1,12 +1,11 @@
 {
   "private": true,
   "name": "example",
-  "description": "This description appears on meta description tag.",
+  "description": "...",
   "version": "1.0.0",
   "main": "pixijs/index.ts",
   "scripts": {
     "start": "gamebundler",
-    "start-final": "gamebundler ./pixijs/index.ts",
     "playcanvas": "gamebundler .playcanvas/index.ts",
     "phaser": "gamebundler ./phaser/index.ts"
   },

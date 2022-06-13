@@ -46,13 +46,13 @@ Game developers often have specific needs not always met by modern web tooling. 
 
 ```typescript
 // assets.bundle.ts
-import comptime from "@gamebundler/comptime";
+import bundle from "@gamebundler/comptime";
 
-export const spritesheet = await comptime.spritesheet([
+export const spritesheet = await bundle.spritesheet([
   require('./assets/ball/*.png'),
 ]);
 
-export const audio = await comptime.audiosprite([
+export const audio = await bundle.audiosprite([
   require('./assets/sound/*.ogg')
 ]);
 ```
