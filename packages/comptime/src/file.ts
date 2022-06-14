@@ -41,8 +41,6 @@ export function getFingerprint(contents: crypto.BinaryLike) {
   return crypto.createHash("md5").update(contents).digest("base64url").toString();
 }
 
-export const enqueuedFiles: File[] = [];
-
 export class File {
   constructor(
     private extension: string,
@@ -58,7 +56,12 @@ export class File {
     if (config.isReleaseMode()) {
       // TODO: compress the file
     }
+
+    // write final file/asset
     await fs.writeFile(path.resolve(outputDir, this.filename), this.contents);
+
+    // free file contents from memory
+    delete this.contents;
   }
 
   toJSON() {
@@ -66,18 +69,10 @@ export class File {
   }
 }
 
-export function outputFile(extension: string, contents: crypto.BinaryLike, filename?: string) {
+export async function outputFile(extension: string, contents: crypto.BinaryLike, filename?: string) {
   const file = new File(extension, contents, filename);
 
-  enqueuedFiles.push(file);
+  await file.write(config.getAssetsDirectory());
 
   return file;
-}
-
-export async function persistEnqueuedFiles(outputDir: string) {
-  const files = enqueuedFiles.slice(0);
-
-  enqueuedFiles.length = 0;
-
-  await Promise.all(files.map(async (file) => await file.write(outputDir)));
 }

@@ -40,10 +40,11 @@ export default (
   do {
     ++top;
     pixels = context.getImageData(0, top, width, 1).data;
-  } while (isTransparent(pixels));
+  } while (isTransparent(pixels) && top < height);
 
   if (top === height) {
-    throw new Error("Can't detect edges.");
+    console.error(`\n\n❌ Can't detect spritesheet edges.\nPlease make sure you aren't trying to fit too many sprites into the spritesheet.\n\n`)
+    return { top: 0, left: 0, bottom: 0, right: 0 };
   }
 
   // Left
@@ -51,21 +52,21 @@ export default (
   do {
     ++left;
     pixels = context.getImageData(left, top, 1, height - top).data;
-  } while (isTransparent(pixels));
+  } while (isTransparent(pixels) && left < width);
 
   // Bottom
   let bottom = -1;
   do {
     ++bottom;
     pixels = context.getImageData(left, height - bottom - 1, width - left, 1).data;
-  } while (isTransparent(pixels));
+  } while (isTransparent(pixels) && bottom < height);
 
   // Right
   let right = -1;
   do {
     ++right;
     pixels = context.getImageData(width - right - 1, top, 1, height - (top + bottom)).data;
-  } while (isTransparent(pixels));
+  } while (isTransparent(pixels) && right < width);
 
   return {
     top,

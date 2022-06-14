@@ -19,8 +19,6 @@ export function getCurrentManifest() {
 export class Manifest {
   caches: {[key: string]: any} = {};
 
-  // TODO: invalidate cache
-
   async cache<T>(files: Array<string | Buffer>, callback: () => Promise<T>): Promise<T>
   async cache<T>(files: Array<string | Buffer>, options: any, callback: () => Promise<T>): Promise<T>
   async cache<T>(files: Array<string | Buffer>, optionsOrCallback: any, callback?: () => Promise<T>): Promise<T> {

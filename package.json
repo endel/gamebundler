@@ -7,8 +7,13 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run start --prefix packages/example",
+    "playcanvas": "npm run playcanvas --prefix packages/example",
+    "phaser": "npm run phaser --prefix packages/example",
+    "babylonjs": "npm run babylonjs --prefix packages/example",
+
     "build": "npm run build --prefix packages/runtime",
-    "watch": "npm run watch --prefix packages/gamebundler & npm run watch --prefix packages/runtime & npm run watch --prefix packages/comptime & npm run watch --prefix packages/spritesheet"
+    "watch": "npm run watch --prefix packages/gamebundler & npm run watch --prefix packages/runtime & npm run watch --prefix packages/comptime & npm run watch --prefix packages/spritesheet",
+    "publish": "npm publish --workspace=gamebundler && npm publish --workspace=@gamebundler/runtime && npm publish --workspace=@gamebundler/comptime && npm publish --workspace=@gamebundler/spritesheet"
   },
   "repository": {
     "type": "git",

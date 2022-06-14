@@ -1,8 +1,8 @@
 import Sound from "@pixi/sound"; // register sound loader
 import { Loader, LoaderResource } from "@pixi/loaders";
-import type { ImageReturnType, SpriteSheetReturnType, AudioReturnType, AudioSpriteReturnType } from "@gamebundler/comptime";
+import type { ImageReturnType, SpriteSheetReturnType, AudioReturnType, AudioSpriteReturnType, RawReturnType } from "@gamebundler/comptime";
 
-type AssetType = SpriteSheetReturnType | ImageReturnType | AudioReturnType | AudioSpriteReturnType;
+type AssetType = SpriteSheetReturnType | ImageReturnType | AudioReturnType | AudioSpriteReturnType | RawReturnType;
 
 type MapAssetType<T> = T extends SpriteSheetReturnType
   ? LoaderResource
@@ -12,9 +12,8 @@ type MapAssetType<T> = T extends SpriteSheetReturnType
       ? Sound.Sound
       : T extends AudioSpriteReturnType
         ? Sound.Sound
-        : never;
+        : LoaderResource;
 
-// export async function loadBundle<V extends AssetType, T extends { [key in keyof T]: V }>(bundle: T): Promise<{ [key in keyof T]: ValueOf<T>['type'] }> {
 export async function loadBundle<V extends AssetType, T extends { [key in keyof T]: V }>(bundle: T): Promise< { [key in keyof T]: MapAssetType<T[key]> } > {
   const result: { [key in keyof T]?: MapAssetType<T[key]> } = {};
 
@@ -46,12 +45,6 @@ export async function loadBundle<V extends AssetType, T extends { [key in keyof 
       for (const name in bundle) {
         const asset = bundle[name];
         switch (asset.type) {
-          case "spritesheet":
-          case "image":
-            // @ts-ignore
-            result[name] = loader.resources[name];
-            break;
-
           case "audiosprite":
             const sound = loader.resources[name].sound;
             sound.addSprites(asset.spritemap);
@@ -63,8 +56,12 @@ export async function loadBundle<V extends AssetType, T extends { [key in keyof 
             // @ts-ignore
             result[name] = loader.resources[name].sound;
             break;
-        }
 
+          default:
+            // @ts-ignore
+            result[name] = loader.resources[name];
+            break;
+        }
       }
 
       // @ts-ignore

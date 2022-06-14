@@ -1,8 +1,9 @@
 {
   "name": "@gamebundler/runtime",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimal runtime required for gamebundler",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "module": "src/index.ts",
   "scripts": {
     "build": "tsc",
@@ -26,20 +27,30 @@
         "default": "./lib/index.js"
       }
     },
-    "./lib/pixi": {
-      "import": {
-        "types": "./lib/pixi.d.ts",
-        "default": "./lib/pixi.js"
-      },
-      "require": {
-        "types": "./lib/pixi.d.ts",
-        "default": "./lib/pixi.js"
-      }
+    "./pixi": {
+      "import":  "./lib/pixi.js",
+      "require":  "./lib/pixi.js"
+    },
+    "./phaser3": {
+      "import":  "./lib/phaser3.js",
+      "require":  "./lib/phaser3.js"
+    },
+    "./playcanvas": {
+      "import":  "./lib/playcanvas.js",
+      "require":  "./lib/playcanvas.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "pixi": ["./lib/pixi.d.ts"],
+      "phaser3": ["./lib/phaser3.d.ts"],
+      "playcanvas": ["./lib/playcanvas.d.ts"]
     }
   },
   "devDependencies": {
     "@gamebundler/comptime": "^1.0.0",
     "@pixi/loaders": "^6.4.2",
-    "@pixi/sound": "^4.2.0"
+    "@pixi/sound": "^4.2.0",
+    "phaser": "^3.55.2"
   }
 }

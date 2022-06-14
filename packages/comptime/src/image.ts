@@ -31,7 +31,7 @@ export async function image(
   return await manifest.cache([filepath], options, async () => {
     return {
       type: "image",
-      image: outputFile("png", await fs.promises.readFile(filepath)) as unknown as string
+      image: await outputFile("png", await fs.promises.readFile(filepath)) as unknown as string
     };
   });
 }
@@ -49,13 +49,17 @@ export async function spritesheet(
   // Force PNG for now
   options.outputFormat = "png";
 
-  const isKeyValue = !Array.isArray(images);
+  const isKeyValue = (
+    !Array.isArray(images) &&
+    // wildcard import should not be considered a key-value
+    (typeof (images.default) === "undefined" && typeof (images.filenames) === "undefined")
+  );
 
   const paths = (isKeyValue)
     ? Object.values(images)
     : images;
 
-  const files = evaluateFilePaths(paths);
+  const files = evaluateFilePaths(paths as FilePath[]);
 
   return await manifest.cache(files, options, async () => {
     const result = await generateSpritesheet(isKeyValue ? images : files, {
@@ -65,8 +69,8 @@ export async function spritesheet(
 
     return {
       type: "spritesheet",
-      image: outputFile("png", result.image, `${result.hash}.${options.outputFormat}`) as unknown as string,
-      json: outputFile("json", JSON.stringify(result.json)) as unknown as string,
+      image: await outputFile("png", result.image, `${result.hash}.${options.outputFormat}`) as unknown as string,
+      json: await outputFile("json", JSON.stringify(result.json)) as unknown as string,
     };
   });
 }

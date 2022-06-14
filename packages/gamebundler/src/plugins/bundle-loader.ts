@@ -1,8 +1,8 @@
-import fsPromises from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 import esbuild from '@netlify/esbuild';
 
-import { config, persistEnqueuedFiles } from "@gamebundler/comptime";
+import * as bundle from "@gamebundler/comptime";
 import * as manifest from "@gamebundler/comptime/lib/manifest.js";
 
 import { fileLoaderPlugin } from './file-loader.js';
@@ -16,7 +16,7 @@ import { nativeNodeModulesPlugin } from './native-node-module-loader.js';
 //
 
 function buildBundleSources(entrypoint: string) {
-  config.setSourceDirectory(path.dirname(entrypoint));
+  bundle.config.setSourceDirectory(path.dirname(entrypoint));
 
   return esbuild.build({
     entryPoints: [entrypoint],
@@ -29,8 +29,8 @@ function buildBundleSources(entrypoint: string) {
     external: [
       "@gamebundler/comptime",
       "canvas", "psd", "fast-glob", // common/internal packages
-      ...Object.keys(config.getPackageJSON()?.dependencies || {}),
-      ...Object.keys(config.getPackageJSON()?.devDependencies || {}),
+      ...Object.keys(bundle.config.getPackageJSON()?.dependencies || {}),
+      ...Object.keys(bundle.config.getPackageJSON()?.devDependencies || {}),
     ],
     // assetNames:
     plugins: [
@@ -38,7 +38,7 @@ function buildBundleSources(entrypoint: string) {
       wildcardFileLoaderPlugin, fileLoaderPlugin, rawLoaderPlugin,
     ],
     minify: false,
-    outdir: config.getCacheDir(),
+    outdir: bundle.config.getCacheDir(),
   });
 }
 
@@ -58,7 +58,7 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           file.path = file.path.replace(".js", ".mjs");
 
           // write compiled file
-          await fsPromises.writeFile(file.path, file.text);
+          await fs.promises.writeFile(file.path, file.text);
 
           try {
             /**
@@ -82,8 +82,6 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
         console.error("ERROR - bundle-loader:", e);
       }
 
-      await persistEnqueuedFiles(config.getAssetsDirectory());
-
       let contents: string = "";
 
       for (const key in exports) {
@@ -94,10 +92,22 @@ export const bundleLoaderPlugin: esbuild.Plugin = {
           contents += `export const ${key} = `;
         }
 
-        contents += JSON.stringify(exports[key]) + ";\n";
+        let value = exports[key];
+
+        // TODO: improve me!
+        // process raw require()/import() inputs to use bundle.raw()
+        const rawFilePath = bundle.evaluateFilePath(value)
+        if (typeof (rawFilePath) === "string" && fs.existsSync(rawFilePath)) {
+          value = await bundle.raw(rawFilePath);
+
+        } else if (Array.isArray(rawFilePath) && rawFilePath.some((filePath) => fs.existsSync(filePath))) {
+          value = await Promise.all(rawFilePath.map((filePath) => bundle.raw(filePath)));
+        }
+
+        contents += JSON.stringify(value) + ";\n";
       }
 
-      console.log(args.path, "\n", contents);
+      // console.log(args.path, "\n", contents);
 
       return { contents };
     });

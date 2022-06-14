@@ -1,6 +1,6 @@
 {
   "name": "@gamebundler/comptime",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "gamebundler compile time utilities.",
   "main": "lib/index.js",
   "scripts": {

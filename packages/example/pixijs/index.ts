@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import "@pixi/sound";
 
 import { canvas } from "@gamebundler/runtime";
-import { loadBundle } from "@gamebundler/runtime/lib/pixi";
+import { loadBundle } from "@gamebundler/runtime/pixi";
 
 import * as bundle from "./assets.bundle";
 

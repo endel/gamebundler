@@ -21,6 +21,11 @@ export const FILE_EXTENSIONS = [
   // audio
   'aiff', 'wav', 'ac3', 'mp3', 'mp4', 'm4a', 'ogg', 'opus', 'webm',
 
+  // 3d models
+  'dae', 'fbx', 'obj', 'mtl', 'stl',
+  // (glTF)
+  'glb', 'gltf',
+
   // adobe
   'psd',
 ];

@@ -3,16 +3,19 @@
   "name": "example",
   "description": "...",
   "version": "1.0.0",
+  "type": "module",
   "main": "pixijs/index.ts",
   "scripts": {
     "start": "gamebundler",
-    "playcanvas": "gamebundler .playcanvas/index.ts",
-    "phaser": "gamebundler ./phaser/index.ts"
+    "playcanvas": "gamebundler ./playcanvas/index.ts",
+    "phaser": "gamebundler ./phaser/index.ts",
+    "babylonjs": "gamebundler ./babylonjs/index.ts"
   },
   "author": "Endel Dreyer",
   "license": "MIT",
   "dependencies": {
     "@pixi/sound": "^4.2.0",
+    "babylonjs": "^5.10.0",
     "phaser": "^3.55.2",
     "pixi.js": "^6.3.0",
     "playcanvas": "^1.53.4"

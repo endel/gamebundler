@@ -131,20 +131,20 @@ export default async (
   }));
 
   // const images = await Promise.all(paths.map(path => loadImage(path)));
-
   const playground = createCanvas(undefined, undefined);
-  const playgroundContext = playground.getContext("2d");
 
   // Crop all images
   const data = await Promise.all(images.map(async (source) => {
     const { width, height } = source;
 
-    const w = width * scale;
-    const h = height * scale;
+    const scaledWidth = width * scale;
+    const scaledHeight = height * scale;
 
-    playground.width = w;
-    playground.height = h;
-    playgroundContext.drawImage(source, 0, 0, w, h);
+    playground.width = scaledWidth;
+    playground.height = scaledHeight;
+
+    const playgroundContext = playground.getContext("2d");
+    playgroundContext.drawImage(source, 0, 0, scaledWidth, scaledHeight);
 
     const cropped = crop ? await cropping(playground) : {
       top: 0,
@@ -154,8 +154,8 @@ export default async (
     };
 
     return {
-      width: (w - cropped.left - cropped.right) + margin,
-      height: (h - cropped.top - cropped.bottom) + margin,
+      width: (scaledWidth - cropped.left - cropped.right) + margin,
+      height: (scaledHeight - cropped.top - cropped.bottom) + margin,
 
       source,
       cropped,
