@@ -1,6 +1,6 @@
 # 🕹📦 Web Game Compiler and Asset Bundler
 
-A modern build tool for crafting HTML5 games. Features compile-time asset building and industry standards asset optimization. Built on top of [`esbuild`](https://esbuild.github.io/).
+A modern build tool for crafting HTML5 games. Features compile-time asset building ~and industry standards asset optimization~ (it doesn't, yet...). Built on top of [`esbuild`](https://esbuild.github.io/).
 
 > **Warning**
 > This is an experimental tool.  **Use at your own risk.**
