@@ -3,7 +3,7 @@
 A modern build tool for crafting HTML5 games. Features compile-time asset building and industry standards asset optimization. Built on top of [`esbuild`](https://esbuild.github.io/).
 
 > **Warning**
-> This is an experimental.  **Use at your own risk.**
+> This is an experimental tool.  **Use at your own risk.**
 
 # TODO:
 
@@ -63,12 +63,12 @@ export const audio = await bundle.audiosprite([
 - Generates spritesheets
 - Generates audio sprites
 
-**Integrates nicely with:**
+**Tiny runtime loader helper for:**
 
 - PixiJS
-- Phaser
-- PlayCanvas
-- Babylon.js
+- TODO: PlayCanvas
+- TODO: Phaser
+- TODO: Babylon.js
 - TODO: React
 
 ## Backlog / Research:
