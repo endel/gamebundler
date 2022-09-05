@@ -2,7 +2,7 @@
 
 **💨 Vaporware alert**
 
-_This was just a naive experimentation of mine. Not being actively worked on, but I decided to open-source in case somebody finds it useful._
+_This was just a naive experimentation of mine. It is not being actively worked on, but I decided to open-source in case somebody finds it useful._
 
 - [See "compile-time" asset bundle here](https://github.com/endel/gamebundler/blob/master/packages/example/pixijs/assets.bundle.ts)
 - [See loading the bundle](https://github.com/endel/gamebundler/blob/master/packages/example/pixijs/index.ts#L5)
