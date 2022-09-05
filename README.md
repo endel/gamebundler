@@ -1,6 +1,15 @@
 # 🕹📦 Web Game Compiler and Asset Bundler
 
-A modern build tool for crafting HTML5 games. Features compile-time asset building ~and industry standards asset optimization~ (it doesn't, yet...). Built on top of [`esbuild`](https://esbuild.github.io/).
+**Vaporware alert**
+
+_This was just a naive experimentation of mine. Not being actively worked on, but I decided to open-source in case somebody finds it useful._
+
+- [See "compile-time" asset bundle here](https://github.com/endel/gamebundler/blob/master/packages/example/pixijs/assets.bundle.ts)
+- [See loading the bundle](https://github.com/endel/gamebundler/blob/master/packages/example/pixijs/index.ts#L5)
+
+---
+
+A modern build tool for crafting HTML5 games. Features compile-time asset building ~and industry standards asset optimization~ (it doesn't...). Built on top of [`esbuild`](https://esbuild.github.io/).
 
 > **Warning**
 > This is an experimental tool.  **Use at your own risk.**
