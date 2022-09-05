@@ -1,6 +1,6 @@
 # 🕹📦 Web Game Compiler and Asset Bundler
 
-**Vaporware alert**
+**💨 Vaporware alert**
 
 _This was just a naive experimentation of mine. Not being actively worked on, but I decided to open-source in case somebody finds it useful._
 
@@ -46,10 +46,6 @@ A modern build tool for crafting HTML5 games. Features compile-time asset buildi
 **Nice to have**
 
 - Built-in Dear ImGui integration
-
-# Why?
-
-Game developers often have specific needs not always met by modern web tooling. Yet this tool bridges the gap to bring a modern web development environment made for game developers.
 
 ## Usage
 
